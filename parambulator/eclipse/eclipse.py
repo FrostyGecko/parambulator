@@ -13,7 +13,7 @@ np.set_printoptions(precision=3)
 
 from parambulator.ephem import ephem
 
-import parambulator.ephem as ep
+import parambulator.ephem.ephem as ep
 
 try:
     import os
