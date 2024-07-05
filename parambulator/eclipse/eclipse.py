@@ -11,10 +11,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 np.set_printoptions(precision=3)
 
-from parambulator.ephem import ephem
-
-import parambulator.ephem.ephem as ep
-
 try:
     import os
     os.system('clear')
