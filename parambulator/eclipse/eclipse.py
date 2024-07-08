@@ -171,21 +171,22 @@ def EclipseGeometry(P1,P2,P3,r1,r2):
     d       = np.sin(theta)*D32
     s       = np.cos(theta)*D32
     
-#%% Main
-#### Constants
-SunRadius       = 695700
-EarthRadius     = 6378.165
-deg2rad         = np.pi/180
-rad2deg         = 180/np.pi
-
-#### Positions
-SunPos          = np.array([0,0,0])
-EarthPos        = np.array([-147000000,0,0])
-SatPos          = np.array([-7000,600,0]) + EarthPos
-
-#### Calculate Eclipse
-eclipseType,theta,theta1,theta2 = EclipseType(SunPos,EarthPos,SatPos,SunRadius,EarthRadius)
-occ_per     = OcclusionPercentage(theta, theta1, theta2)
+    
+if __name__ == '__main__':
+    #### Constants
+    SunRadius       = 695700
+    EarthRadius     = 6378.165
+    deg2rad         = np.pi/180
+    rad2deg         = 180/np.pi
+    
+    #### Positions
+    SunPos          = np.array([0,0,0])
+    EarthPos        = np.array([-147000000,0,0])
+    SatPos          = np.array([-7000,600,0]) + EarthPos
+    
+    #### Calculate Eclipse
+    eclipseType,theta,theta1,theta2 = EclipseType(SunPos,EarthPos,SatPos,SunRadius,EarthRadius)
+    occ_per     = OcclusionPercentage(theta, theta1, theta2)
         
 
     
