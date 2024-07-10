@@ -154,27 +154,27 @@ def get_position_ICRF(body,julian_date,kernel):
     '''
     match body:
         case "Sun":
-            return get_sun_position_ICRF(kernel,julian_date)
+            return eph00100_get_sun_position_ICRF(kernel,julian_date)
         case "Mercury":
-            return get_mercury_position_ICRF(kernel,julian_date)
+            return eph00101_get_mercury_position_ICRF(kernel,julian_date)
         case "Venus":
-            return get_venus_position_ICRF(kernel,julian_date)
+            return eph00102_get_venus_position_ICRF(kernel,julian_date)
         case "Earth":
-            return get_earth_position_ICRF(kernel,julian_date)
+            return eph00103_get_earth_position_ICRF(kernel,julian_date)
         case "Earth Barycenter":
-            return get_earth_barycenter_position_ICRF(kernel,julian_date)
+            return eph00104_get_earth_barycenter_position_ICRF(kernel,julian_date)
         case "Mars":
-            return get_mars_position_ICRF(kernel,julian_date)
+            return eph00105_get_mars_position_ICRF(kernel,julian_date)
         case "Jupiter":
-            return get_jupiter_position_ICRF(kernel,julian_date)
+            return eph00106_get_jupiter_position_ICRF(kernel,julian_date)
         case "Saturn":
-            return get_saturn_position_ICRF(kernel,julian_date)
+            return eph00107_get_saturn_position_ICRF(kernel,julian_date)
         case "Uranus":
-            return get_uranus_position_ICRF(kernel,julian_date)
+            return eph00108_get_uranus_position_ICRF(kernel,julian_date)
         case "Neptune":
-            return get_neptune_position_ICRF(kernel,julian_date)
+            return eph00109_get_neptune_position_ICRF(kernel,julian_date)
         case "Pluto":
-            return get_pluto_position_ICRF(kernel,julian_date)
+            return eph00110_get_pluto_position_ICRF(kernel,julian_date)
     
 def get_relative_position_ICRF(from_body,to_body,julian_date,kernel):
     '''
@@ -199,51 +199,51 @@ def get_relative_position_ICRF(from_body,to_body,julian_date,kernel):
     '''
     match from_body:
         case "Sun":
-            from_body_position = get_sun_position_ICRF(kernel,julian_date)
+            from_body_position = eph00100_get_sun_position_ICRF(kernel,julian_date)
         case "Mercury":
-            from_body_position = get_mercury_position_ICRF(kernel,julian_date)
+            from_body_position = eph00101_get_mercury_position_ICRF(kernel,julian_date)
         case "Venus":
-            from_body_position = get_venus_position_ICRF(kernel,julian_date)
+            from_body_position = eph00102_get_venus_position_ICRF(kernel,julian_date)
         case "Earth":
-            from_body_position = get_earth_position_ICRF(kernel,julian_date)
+            from_body_position = eph00103_get_earth_position_ICRF(kernel,julian_date)
         case "Earth Barycenter":
-            from_body_position = get_earth_barycenter_position_ICRF(kernel,julian_date)
+            from_body_position = eph00104_get_earth_barycenter_position_ICRF(kernel,julian_date)
         case "Mars":
-            from_body_position = get_mars_position_ICRF(kernel,julian_date)
+            from_body_position = eph00105_get_mars_position_ICRF(kernel,julian_date)
         case "Jupiter":
-            from_body_position = get_jupiter_position_ICRF(kernel,julian_date)
+            from_body_position = eph00106_get_jupiter_position_ICRF(kernel,julian_date)
         case "Saturn":
-            from_body_position = get_saturn_position_ICRF(kernel,julian_date)
+            from_body_position = eph00107_get_saturn_position_ICRF(kernel,julian_date)
         case "Uranus":
-            from_body_position = get_uranus_position_ICRF(kernel,julian_date)
+            from_body_position = eph00108_get_uranus_position_ICRF(kernel,julian_date)
         case "Neptune":
-            from_body_position = get_neptune_position_ICRF(kernel,julian_date)
+            from_body_position = eph00109_get_neptune_position_ICRF(kernel,julian_date)
         case "Pluto":
-            from_body_position = get_pluto_position_ICRF(kernel,julian_date)
+            from_body_position = eph00110_get_pluto_position_ICRF(kernel,julian_date)
         
     match to_body:
         case "Sun":
-            to_body_position = get_sun_position_ICRF(kernel,julian_date)
+            to_body_position = eph00100_get_sun_position_ICRF(kernel,julian_date)
         case "Mercury":
-            to_body_position = get_mercury_position_ICRF(kernel,julian_date)
+            to_body_position = eph00101_get_mercury_position_ICRF(kernel,julian_date)
         case "Venus":
-            to_body_position = get_venus_position_ICRF(kernel,julian_date)
+            to_body_position = eph00102_get_venus_position_ICRF(kernel,julian_date)
         case "Earth":
-            to_body_position = get_earth_position_ICRF(kernel,julian_date)
+            to_body_position = eph00103_get_earth_position_ICRF(kernel,julian_date)
         case "Earth Barycenter":
-            to_body_position = get_earth_barycenter_position_ICRF(kernel,julian_date)
+            to_body_position = eph00104_get_earth_barycenter_position_ICRF(kernel,julian_date)
         case "Mars":
-            to_body_position = get_mars_position_ICRF(kernel,julian_date)
+            to_body_position = eph00105_get_mars_position_ICRF(kernel,julian_date)
         case "Jupiter":
-            to_body_position = get_jupiter_position_ICRF(kernel,julian_date)
+            to_body_position = eph00106_get_jupiter_position_ICRF(kernel,julian_date)
         case "Saturn":
-            to_body_position = get_saturn_position_ICRF(kernel,julian_date)
+            to_body_position = eph00107_get_saturn_position_ICRF(kernel,julian_date)
         case "Uranus":
-            to_body_position = get_uranus_position_ICRF(kernel,julian_date)
+            to_body_position = eph00108_get_uranus_position_ICRF(kernel,julian_date)
         case "Neptune":
-            to_body_position = get_neptune_position_ICRF(kernel,julian_date)
+            to_body_position = eph00109_get_neptune_position_ICRF(kernel,julian_date)
         case "Pluto":
-            to_body_position = get_pluto_position_ICRF(kernel,julian_date)
+            to_body_position = eph00110_get_pluto_position_ICRF(kernel,julian_date)
             
     #### Calculate relative position
     relative_position = to_body_position - from_body_position
