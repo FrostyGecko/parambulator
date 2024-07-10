@@ -1,3 +1,10 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Jul  9 12:52:53 2024
+
+@author: isaacfoster
+"""
 from jplephem.spk import SPK
 
 spk_filepath = 'spk_files/de440_mars.bsp'

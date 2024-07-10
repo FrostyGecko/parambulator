@@ -1,11 +1,21 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Jul  9 12:52:53 2024
+
+@author: isaacfoster
+"""
+
 import numpy as np
 import pandas as pd
 import parambulator.data.planet_data as planet_data
 
-deg2rad = np.pi/180  # [rad/deg]
-rad2deg = 180/np.pi  # [deg/rad]
+deg2rad     = np.pi/180  # [rad/deg]
+rad2deg     = 180/np.pi  # [deg/rad]
+mu_default  = planet_data.earth['mu']
 
-def Orbit_Normal_Vector(RAAN,inc):
+
+def tbp000_OrbitNormalVector(RAAN,inc):
     
     RAAN    = np.deg2rad(RAAN)
     inc     = np.deg2rad(inc)
@@ -25,15 +35,8 @@ def Orbit_Normal_Vector(RAAN,inc):
     O_hat = A @ B @ n
     
     return O_hat
-    
 
-def InverseSquare(I0,R0,R1):
-    return I0*((R0**2)/(R1**2))
-    
-def GravAcc(G,r,m1,m2):
-    return G*(m1*m2)/(r**2)
-
-def LagrangeFG(R0,V0,delta_nu,mu):
+def LagrangeFG(R0,V0,delta_nu,mu=mu_default):
     
     delta_nu = delta_nu*(3.1415926/180)
     
@@ -63,54 +66,149 @@ def LagrangeFG_NextState(R0,V0,FG):
     
     return R1, V1
 
-def Vescape(r_mag,mu):
+def tbp000_Vescape(r_mag,mu=mu_default):
     return np.sqrt((2*mu)/r_mag)
 
-def tbp0000_EccVec_1(R,V,mu=planet_data.earth['mu']):
+def tbp0000_EccVec_1(R,V,mu=mu_default):
     
     h_vec   = np.cross(R, V)
     e_vec   = np.cross(V,h_vec)/mu - R/np.linalg.norm(R)
     
     return e_vec
 
-def tbp0000_Ecc(R,V,mu=planet_data.earth['mu']):
+def tbp0000_Ecc(R,V,mu=mu_default):
     
     h_vec   = np.cross(R, V)
     e_vec   = np.cross(V,h_vec)/mu - R/np.linalg.norm(R)
     e       = np.linalg.norm(e_vec)
     return e
 
-def tbp0000_SemiLatusRectum(R,V,mu=planet_data.earth['mu']):
-    r_mag   = np.linalg.norm(R)
-    v_mag   = np.linalg.norm(V)
+def tbp0000_SemiLatusRectum1(R,V,mu=mu_default):
+    '''
+    
+
+    Parameters
+    ----------
+    R : TYPE
+        DESCRIPTION.
+    V : TYPE
+        DESCRIPTION.
+    mu : TYPE, optional
+        DESCRIPTION. The default is mu_default.
+
+    Returns
+    -------
+    p : TYPE
+        DESCRIPTION.
+
+    '''
     h_vec   = np.cross(R, V)
     h_mag   = np.linalg.norm(h_vec)
     p       = (h_mag**2)/mu
+    
     return p
+
+def tbp0000_SemiLatusRectum2(h,mu=mu_default):
+    '''
     
+
+    Parameters
+    ----------
+    h : TYPE
+        DESCRIPTION.
+    mu : TYPE, optional
+        DESCRIPTION. The default is mu_default.
+
+    Returns
+    -------
+    TYPE
+        DESCRIPTION.
+
+    '''
+    return h**2/mu
+
+def tbp0000_SemiLatusRectum3(a,e):
+    '''
     
-def tbp0000_semi_major_axis_1(specific_energy,mu=planet_data.earth['mu']):
+
+    Parameters
+    ----------
+    a : TYPE
+        DESCRIPTION.
+    e : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    TYPE
+        DESCRIPTION.
+
+    '''
+    return a*(1-e**2)
+
+    
+def tbp0000_semi_major_axis_1(specific_energy,mu=mu_default):
+    '''
+    
+
+    Parameters
+    ----------
+    specific_energy : TYPE
+        DESCRIPTION.
+    mu : TYPE, optional
+        DESCRIPTION. The default is mu_default.
+
+    Returns
+    -------
+    TYPE
+        DESCRIPTION.
+
+    '''
     return -mu/(2*specific_energy)
     
 def tbp0000_semi_major_axis_1():
     pass
 
-def tbp0000_ecc_1():
-    pass
-
-def tbp0000_orbit_shape(R,V,mu=planet_data.earth['mu']):
-    r               = np.linalg.norm(R)
-    v               = np.linalg.norm(V)
-    h_vec           = np.cross(R, V)
-    h               = np.linalg.norm(h_vec)
-    specific_energy = (v**2/2) - mu/r
-    a               = -mu/(2*specific_energy)
-    e               = ((h**2)/(mu*r) - 1) 
-    i               = np.acos(h_vec[2]/h)
+def tbp0000_ecc_1(h,r,mu):
+    '''
     
-    return [a,e,i]
 
+    Parameters
+    ----------
+    h : TYPE
+        DESCRIPTION.
+    r : TYPE
+        DESCRIPTION.
+    mu : TYPE
+        DESCRIPTION.
 
+    Returns
+    -------
+    e : TYPE
+        DESCRIPTION.
+
+    '''
+    e = ((h**2)/(mu*r) - 1)
+
+    return e
+
+def tbp0000_ecc_2(e_vec):
+    '''
+    
+
+    Parameters
+    ----------
+    e_vec : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    TYPE
+        DESCRIPTION.
+
+    '''
+    return np.linalg.norm(e_vec)
+    
 def tbp0000_node_vector_1(R,V):
     '''
     
@@ -133,23 +231,79 @@ def tbp0000_node_vector_1(R,V):
     N       = np.cross(K,h_vec)
     
     return N
-            
 
+def tbp0000_Period(a,mu=mu_default):
+    '''
+    
 
-def tbp0000_Cart_to_Kepler(R,V,mu=planet_data.earth['mu']):
+    Parameters
+    ----------
+    a : TYPE
+        DESCRIPTION.
+    mu : TYPE, optional
+        DESCRIPTION. The default is mu_default.
+
+    Returns
+    -------
+    TYPE
+        DESCRIPTION.
+
+    '''
+    return (2*np.pi*(a**(3/2)))/np.sqrt(mu)
+
+def tbp0000_SpecificEnergy(v,r,mu=mu_default):
+    '''
+    
+
+    Parameters
+    ----------
+    v : TYPE
+        DESCRIPTION.
+    r : TYPE
+        DESCRIPTION.
+    mu : TYPE, optional
+        DESCRIPTION. The default is mu_default.
+
+    Returns
+    -------
+    TYPE
+        DESCRIPTION.
+
+    '''
+    return (v**2)/2 - mu/r
+
+def tbp0000_Cart_to_Kepler(R,V,mu=mu_default):
+    '''
+    
+
+    Parameters
+    ----------
+    R : TYPE
+        DESCRIPTION.
+    V : TYPE
+        DESCRIPTION.
+    mu : TYPE, optional
+        DESCRIPTION. The default is mu_default.
+
+    Returns
+    -------
+    kep_elements : TYPE
+        DESCRIPTION.
+
+    '''
     
     r               = np.linalg.norm(R)
     v               = np.linalg.norm(V)
     H               = np.cross(R, V)
     h               = np.linalg.norm(H)
     e_vec           = tbp0000_EccVec_1(R,V,mu)
-    specific_energy = (v**2)/2 - mu/r
+    specific_energy = tbp0000_SpecificEnergy(v, r)
     a               = -mu/(2*specific_energy)
     i               = np.arccos(H[2]/h)
-    e               = ((h**2)/(mu*r) - 1)    
-    p               = h**2/mu
-    P               = (2*np.pi*(a**(3/2)))/np.sqrt(mu)
-    r_p             = a*(1-e)
+    e               = tbp0000_ecc_1(h,r,mu)   
+    p               = tbp0000_SemiLatusRectum2(h,mu)
+    P               = tbp0000_Period(a,mu)
+    r_p             = a*(1- e)
     r_a             = a*(1+e)
     K               = np.array([0,0,1])
     N               = np.cross(K,H)
@@ -206,7 +360,7 @@ def tbp0000_Cart_to_Kepler(R,V,mu=planet_data.earth['mu']):
     return kep_elements
 
     
-def PeriapsisVec(R,V,mu):
+def tbp0000_PeriapsisVec(R,V,mu=mu_default):
     
     e_vec           = tbp0000_EccVec_1(R,V,mu)
     e               = np.linalg.norm(e_vec)
@@ -219,7 +373,7 @@ def PeriapsisVec(R,V,mu):
     
     return r_p_vec
 
-def ApoapsisVec(R,V,mu):
+def tbp0000_ApoapsisVec(R,V,mu=mu_default):
     
     e_vec           = tbp0000_EccVec_1(R,V,mu)
     e               = np.linalg.norm(e_vec)
