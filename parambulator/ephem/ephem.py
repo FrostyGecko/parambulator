@@ -7,19 +7,15 @@ Created on Tue Jul  9 12:52:53 2024
 """
 from jplephem.spk import SPK
 
-spk_filepath = 'spk_files/de440_mars.bsp'
-spk_filepath = 'spk_files/de421.bsp'
 
 #https://github.com/AndrewAnnex/SpiceyPy
 #https://github.com/skyfielders/python-skyfield/
 #https://space.stackexchange.com/questions/51068/is-it-posible-to-convert-jpl-horizons-vectors-to-ecef/51077?noredirect=1
 
-
-print('imported ephem')
-
-def test_print():
-    print('test print')
 #%% General Ephemeris Functions
+spk_filepath = 'spk_files/de440_mars.bsp'
+spk_filepath = 'spk_files/de421.bsp'
+
 def eph00001_load_kernel(spk_filepath):
     return SPK.open(spk_filepath)
 
@@ -138,6 +134,24 @@ def eph00210_get_pluto_velocity_ICRF(kernel,julian_date):
 
 #%% Extended Functions
 def get_position_ICRF(body,julian_date,kernel):
+    '''
+    
+
+    Parameters
+    ----------
+    body : TYPE
+        DESCRIPTION.
+    julian_date : TYPE
+        DESCRIPTION.
+    kernel : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    TYPE
+        DESCRIPTION.
+
+    '''
     match body:
         case "Sun":
             return get_sun_position_ICRF(kernel,julian_date)
@@ -163,6 +177,26 @@ def get_position_ICRF(body,julian_date,kernel):
             return get_pluto_position_ICRF(kernel,julian_date)
     
 def get_relative_position_ICRF(from_body,to_body,julian_date,kernel):
+    '''
+    
+
+    Parameters
+    ----------
+    from_body : TYPE
+        DESCRIPTION.
+    to_body : TYPE
+        DESCRIPTION.
+    julian_date : TYPE
+        DESCRIPTION.
+    kernel : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    relative_position : TYPE
+        DESCRIPTION.
+
+    '''
     match from_body:
         case "Sun":
             from_body_position = get_sun_position_ICRF(kernel,julian_date)

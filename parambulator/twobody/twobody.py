@@ -15,27 +15,6 @@ rad2deg     = 180/np.pi  # [deg/rad]
 mu_default  = planet_data.earth['mu']
 
 
-def tbp000_OrbitNormalVector(RAAN,inc):
-    
-    RAAN    = np.deg2rad(RAAN)
-    inc     = np.deg2rad(inc)
-    
-    A = np.matrix([[np.cos(RAAN), -np.sin(RAAN),  0],
-                   [np.sin(RAAN), np.cos(RAAN),   0],
-                   [0,           0,               1]])
-   
-    B = np.matrix([[1, 0, 0],
-                   [0, np.cos(inc), -np.sin(inc)],
-                   [0, np.sin(inc), np.cos(inc)]])
-   
-    n = np.matrix([[0],
-                   [0],
-                   [1]])
-                   
-    O_hat = A @ B @ n
-    
-    return O_hat
-
 def LagrangeFG(R0,V0,delta_nu,mu=mu_default):
     
     delta_nu = delta_nu*(3.1415926/180)
@@ -66,10 +45,44 @@ def LagrangeFG_NextState(R0,V0,FG):
     
     return R1, V1
 
-def tbp000_Vescape(r_mag,mu=mu_default):
+def tbp0000_Vescape(r_mag,mu=mu_default):
+    '''
+    
+
+    Parameters
+    ----------
+    r_mag : TYPE
+        DESCRIPTION.
+    mu : TYPE, optional
+        DESCRIPTION. The default is mu_default.
+
+    Returns
+    -------
+    TYPE
+        DESCRIPTION.
+
+    '''
     return np.sqrt((2*mu)/r_mag)
 
 def tbp0000_EccVec_1(R,V,mu=mu_default):
+    '''
+    
+
+    Parameters
+    ----------
+    R : TYPE
+        DESCRIPTION.
+    V : TYPE
+        DESCRIPTION.
+    mu : TYPE, optional
+        DESCRIPTION. The default is mu_default.
+
+    Returns
+    -------
+    e_vec : TYPE
+        DESCRIPTION.
+
+    '''
     
     h_vec   = np.cross(R, V)
     e_vec   = np.cross(V,h_vec)/mu - R/np.linalg.norm(R)
@@ -77,6 +90,24 @@ def tbp0000_EccVec_1(R,V,mu=mu_default):
     return e_vec
 
 def tbp0000_Ecc(R,V,mu=mu_default):
+    '''
+    
+
+    Parameters
+    ----------
+    R : TYPE
+        DESCRIPTION.
+    V : TYPE
+        DESCRIPTION.
+    mu : TYPE, optional
+        DESCRIPTION. The default is mu_default.
+
+    Returns
+    -------
+    e : TYPE
+        DESCRIPTION.
+
+    '''
     
     h_vec   = np.cross(R, V)
     e_vec   = np.cross(V,h_vec)/mu - R/np.linalg.norm(R)
@@ -165,9 +196,6 @@ def tbp0000_semi_major_axis_1(specific_energy,mu=mu_default):
 
     '''
     return -mu/(2*specific_energy)
-    
-def tbp0000_semi_major_axis_1():
-    pass
 
 def tbp0000_ecc_1(h,r,mu):
     '''
@@ -203,11 +231,12 @@ def tbp0000_ecc_2(e_vec):
 
     Returns
     -------
-    TYPE
+    e : TYPE
         DESCRIPTION.
 
     '''
-    return np.linalg.norm(e_vec)
+    e = np.linalg.norm(e_vec)
+    return e
     
 def tbp0000_node_vector_1(R,V):
     '''
@@ -313,47 +342,47 @@ def tbp0000_Cart_to_Kepler(R,V,mu=mu_default):
     RAAN            = np.arccos(N[0]/n)
     
     if N[1] > 0:
-        RAAN = np.pi - RAAN
+        RAAN        = np.pi - RAAN
         
     #### Argument of Periapsis
     omega           = np.arccos(np.dot(N,e_vec)/(n*e))
     
     #### True Anomaly
     if e_vec[2] > 0:
-        omega = np.pi - omega
+        omega       = 2*np.pi - omega
     
-    e_vec_dot_R = np.dot(e_vec,R)
-    nu          = np.arccos(e_vec_dot_R/(e*r))
+    e_vec_dot_R     = np.dot(e_vec,R)
+    nu              = np.arccos(e_vec_dot_R/(e*r))
     
     #### Argument of Latitude at Epoch
     if e_vec_dot_R > 0:
-        nu = np.pi - nu
+        nu          = 2*np.pi - nu
     
-    arg_lat_epoch = np.arccos(np.dot(N,R)/(n*r))
+    arg_lat_epoch   = np.arccos(np.dot(N,R)/(n*r))
     
     #### True Longitude at Epoch
     if R[2] > 0:
-        arg_lat_epoch = np.pi - arg_lat_epoch
+        arg_lat_epoch = 2*np.pi - arg_lat_epoch
         
-    true_long_epoch     = RAAN+omega+nu
+    true_long_epoch   = RAAN+omega+nu
     
     #### Compile Keplerian Elements
     kep_elements  = {
-                'a':        a,
-                'e':        e,
-                'i':        i*rad2deg,
-                'RAAN':     RAAN*rad2deg,
-                'omega':    omega*rad2deg,
-                'nu':       nu*rad2deg,
-                'P':        P,
-                'e_vec':    e_vec,
-                'specific_energy': specific_energy,
-                'p':        p,
-                'h':        h,
-                'r_p':      r_p,
-                'r_a':      r_a,
-                'arg_lat_epoch':arg_lat_epoch*rad2deg,
-                'true_long_epoch':true_long_epoch*rad2deg,
+                'a':                a,
+                'e':                e,
+                'i':                i*rad2deg,
+                'RAAN':             RAAN*rad2deg,
+                'omega':            omega*rad2deg,
+                'nu':               nu*rad2deg,
+                'P':                P,
+                'e_vec':            e_vec,
+                'specific_energy':  specific_energy,
+                'p':                p,
+                'h':                h,
+                'r_p':              r_p,
+                'r_a':              r_a,
+                'arg_lat_epoch':    arg_lat_epoch*rad2deg,
+                'true_long_epoch':  true_long_epoch*rad2deg,
                 
         }
 
@@ -385,3 +414,24 @@ def tbp0000_ApoapsisVec(R,V,mu=mu_default):
     r_a_vec         = -a*(1+e)*p_hat
     
     return r_a_vec
+
+def tbp0000_OrbitNormalVector(RAAN,inc):
+    
+    RAAN    = np.deg2rad(RAAN)
+    inc     = np.deg2rad(inc)
+    
+    A = np.matrix([[np.cos(RAAN), -np.sin(RAAN),  0],
+                   [np.sin(RAAN), np.cos(RAAN),   0],
+                   [0,           0,               1]])
+   
+    B = np.matrix([[1, 0, 0],
+                   [0, np.cos(inc), -np.sin(inc)],
+                   [0, np.sin(inc), np.cos(inc)]])
+   
+    n = np.matrix([[0],
+                   [0],
+                   [1]])
+                   
+    O_hat = A @ B @ n
+    
+    return O_hat
