@@ -5,17 +5,18 @@ Created on Tue Jul  9 12:52:53 2024
 
 @author: isaacfoster
 """
+#%% Initialize
 from jplephem.spk import SPK
-
 
 #https://github.com/AndrewAnnex/SpiceyPy
 #https://github.com/skyfielders/python-skyfield/
 #https://space.stackexchange.com/questions/51068/is-it-posible-to-convert-jpl-horizons-vectors-to-ecef/51077?noredirect=1
 
-#%% General Ephemeris Functions
-spk_filepath = 'spk_files/de440_mars.bsp'
-spk_filepath = 'spk_files/de421.bsp'
+#%% Defaults
+spk_filepath    = 'spk_files/de440_mars.bsp'
+spk_folder      = 'spk_files'
 
+#%% General Ephemeris Functions
 def eph00001_load_kernel(spk_filepath):
     '''
     
@@ -74,7 +75,7 @@ def eph00003_print_available_spk_files(spk_folder):
             files.remove('.DS_Store')
         except:
             pass
-        print(files)
+        print(files) 
         return True
     except:
         return False
@@ -300,26 +301,6 @@ def eph00110_get_pluto_position_ICRF(kernel,julian_date):
     '''
     Pluto_position      = kernel[0,9].compute(julian_date)
     return Pluto_position
-
-def eph00111_get_relative_position_ICRF(from_body_position,to_body_position):
-    '''
-    
-
-    Parameters
-    ----------
-    from_body_position : TYPE
-        DESCRIPTION.
-    to_body_position : TYPE
-        DESCRIPTION.
-
-    Returns
-    -------
-    relative_position : TYPE
-        DESCRIPTION.
-
-    '''
-    relative_position = to_body_position - from_body_position
-    return relative_position
 
 #%% Velocity Functions
 def eph00200_get_sun_velocity_ICRF(kernel,julian_date):
@@ -586,8 +567,28 @@ def get_position_ICRF(body,julian_date,kernel):
             return eph00109_get_neptune_position_ICRF(kernel,julian_date)
         case "Pluto":
             return eph00110_get_pluto_position_ICRF(kernel,julian_date)
+        
+def eph00111_get_relative_position(from_body_position,to_body_position):
+    '''
     
-def get_relative_position_ICRF(from_body,to_body,julian_date,kernel):
+
+    Parameters
+    ----------
+    from_body_position : TYPE
+        DESCRIPTION.
+    to_body_position : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    relative_position : TYPE
+        DESCRIPTION.
+
+    '''
+    relative_position = to_body_position - from_body_position
+    return relative_position
+    
+def get_relative_position_ICRF1(from_body,to_body,julian_date,kernel):
     '''
     
 
@@ -660,3 +661,55 @@ def get_relative_position_ICRF(from_body,to_body,julian_date,kernel):
     relative_position = to_body_position - from_body_position
     
     return relative_position
+
+def get_relative_position_ICRF2(fromPos,to_body,julian_date,kernel):
+    '''
+    
+
+    Parameters
+    ----------
+    fromPos : TYPE
+        DESCRIPTION.
+    to_body : TYPE
+        DESCRIPTION.
+    julian_date : TYPE
+        DESCRIPTION.
+    kernel : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    relative_position : TYPE
+        DESCRIPTION.
+
+    '''
+    match to_body:
+        case "Sun":
+            to_body_position = eph00100_get_sun_position_ICRF(kernel,julian_date)
+        case "Mercury":
+            to_body_position = eph00101_get_mercury_position_ICRF(kernel,julian_date)
+        case "Venus":
+            to_body_position = eph00102_get_venus_position_ICRF(kernel,julian_date)
+        case "Earth":
+            to_body_position = eph00103_get_earth_position_ICRF(kernel,julian_date)
+        case "Earth Barycenter":
+            to_body_position = eph00104_get_earth_barycenter_position_ICRF(kernel,julian_date)
+        case "Mars":
+            to_body_position = eph00105_get_mars_position_ICRF(kernel,julian_date)
+        case "Jupiter":
+            to_body_position = eph00106_get_jupiter_position_ICRF(kernel,julian_date)
+        case "Saturn":
+            to_body_position = eph00107_get_saturn_position_ICRF(kernel,julian_date)
+        case "Uranus":
+            to_body_position = eph00108_get_uranus_position_ICRF(kernel,julian_date)
+        case "Neptune":
+            to_body_position = eph00109_get_neptune_position_ICRF(kernel,julian_date)
+        case "Pluto":
+            to_body_position = eph00110_get_pluto_position_ICRF(kernel,julian_date)
+            
+    #### Calculate relative position
+    relative_position = to_body_position - fromPos
+    
+    return relative_position
+
+#%% Frame Conversions

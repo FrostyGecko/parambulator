@@ -5,16 +5,17 @@ Created on Tue Jul  9 12:52:53 2024
 
 @author: isaacfoster
 """
-
+#%% Initialize
 import numpy as np
 import pandas as pd
 import parambulator.data.planet_data as planet_data
 
+#%% Constants
 deg2rad     = np.pi/180  # [rad/deg]
 rad2deg     = 180/np.pi  # [deg/rad]
 mu_default  = planet_data.earth['mu']
 
-
+#%% General
 def LagrangeFG(R0,V0,delta_nu,mu=mu_default):
     
     delta_nu = delta_nu*(3.1415926/180)
@@ -45,7 +46,7 @@ def LagrangeFG_NextState(R0,V0,FG):
     
     return R1, V1
 
-def tbp0000_Vescape(r_mag,mu=mu_default):
+def twb0000_Vescape(r_mag,mu=mu_default):
     '''
     
 
@@ -62,9 +63,11 @@ def tbp0000_Vescape(r_mag,mu=mu_default):
         DESCRIPTION.
 
     '''
-    return np.sqrt((2*mu)/r_mag)
+    Vescape = np.sqrt((2*mu)/r_mag)
+    return Vescape
 
-def tbp0000_EccVec_1(R,V,mu=mu_default):
+#%% Keplerian Elements
+def twb00101_eccVec1(R,V,mu=mu_default):
     '''
     
 
@@ -89,7 +92,7 @@ def tbp0000_EccVec_1(R,V,mu=mu_default):
     
     return e_vec
 
-def tbp0000_Ecc(R,V,mu=mu_default):
+def twb00102_ecc1(R,V,mu=mu_default):
     '''
     
 
@@ -114,7 +117,47 @@ def tbp0000_Ecc(R,V,mu=mu_default):
     e       = np.linalg.norm(e_vec)
     return e
 
-def tbp0000_SemiLatusRectum1(R,V,mu=mu_default):
+def twb00103_ecc2(h,r,mu):
+    '''
+    
+
+    Parameters
+    ----------
+    h : TYPE
+        DESCRIPTION.
+    r : TYPE
+        DESCRIPTION.
+    mu : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    e : TYPE
+        DESCRIPTION.
+
+    '''
+    e = ((h**2)/(mu*r) - 1)
+    return e
+
+def twb00104_ecc3(e_vec):
+    '''
+    
+
+    Parameters
+    ----------
+    e_vec : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    e : TYPE
+        DESCRIPTION.
+
+    '''
+    e = np.linalg.norm(e_vec)
+    return e
+
+def twb00105_SemiLatusRectum1(R,V,mu=mu_default):
     '''
     
 
@@ -139,7 +182,7 @@ def tbp0000_SemiLatusRectum1(R,V,mu=mu_default):
     
     return p
 
-def tbp0000_SemiLatusRectum2(h,mu=mu_default):
+def twb00106_SemiLatusRectum2(h,mu=mu_default):
     '''
     
 
@@ -156,9 +199,10 @@ def tbp0000_SemiLatusRectum2(h,mu=mu_default):
         DESCRIPTION.
 
     '''
-    return h**2/mu
+    p = h**2/mu
+    return p
 
-def tbp0000_SemiLatusRectum3(a,e):
+def twb00107_SemiLatusRectum3(a,e):
     '''
     
 
@@ -175,10 +219,11 @@ def tbp0000_SemiLatusRectum3(a,e):
         DESCRIPTION.
 
     '''
-    return a*(1-e**2)
+    p = a*(1-e**2)
+    return p
 
     
-def tbp0000_semi_major_axis_1(specific_energy,mu=mu_default):
+def twb00108_SemiMajorAxis1(specific_energy,mu=mu_default):
     '''
     
 
@@ -195,73 +240,10 @@ def tbp0000_semi_major_axis_1(specific_energy,mu=mu_default):
         DESCRIPTION.
 
     '''
-    return -mu/(2*specific_energy)
+    a = -mu/(2*specific_energy)
+    return a
 
-def tbp0000_ecc_1(h,r,mu):
-    '''
-    
-
-    Parameters
-    ----------
-    h : TYPE
-        DESCRIPTION.
-    r : TYPE
-        DESCRIPTION.
-    mu : TYPE
-        DESCRIPTION.
-
-    Returns
-    -------
-    e : TYPE
-        DESCRIPTION.
-
-    '''
-    e = ((h**2)/(mu*r) - 1)
-
-    return e
-
-def tbp0000_ecc_2(e_vec):
-    '''
-    
-
-    Parameters
-    ----------
-    e_vec : TYPE
-        DESCRIPTION.
-
-    Returns
-    -------
-    e : TYPE
-        DESCRIPTION.
-
-    '''
-    e = np.linalg.norm(e_vec)
-    return e
-    
-def tbp0000_node_vector_1(R,V):
-    '''
-    
-
-    Parameters
-    ----------
-    R : TYPE
-        DESCRIPTION.
-    V : TYPE
-        DESCRIPTION.
-
-    Returns
-    -------
-    N : TYPE
-        DESCRIPTION.
-
-    '''
-    h_vec   = np.cross(R, V)
-    K       = np.array([0,0,1])
-    N       = np.cross(K,h_vec)
-    
-    return N
-
-def tbp0000_Period(a,mu=mu_default):
+def twb00109_Period(a,mu=mu_default):
     '''
     
 
@@ -278,9 +260,35 @@ def tbp0000_Period(a,mu=mu_default):
         DESCRIPTION.
 
     '''
-    return (2*np.pi*(a**(3/2)))/np.sqrt(mu)
+    P = (2*np.pi*(a**(3/2)))/np.sqrt(mu)
+    return P
 
-def tbp0000_SpecificEnergy(v,r,mu=mu_default):
+def twb00110_SpecificEnergy1(R,V,mu=mu_default):
+    '''
+    
+
+    Parameters
+    ----------
+    R : TYPE
+        DESCRIPTION.
+    V : TYPE
+        DESCRIPTION.
+    mu : TYPE, optional
+        DESCRIPTION. The default is mu_default.
+
+    Returns
+    -------
+    E : TYPE
+        DESCRIPTION.
+
+    '''
+    r = np.linalg.norm(R)
+    v = np.linalg.norm(V)
+    
+    E = (v**2)/2 - mu/r
+    return E
+
+def twb00110_SpecificEnergy2(r,v,mu=mu_default):
     '''
     
 
@@ -299,9 +307,36 @@ def tbp0000_SpecificEnergy(v,r,mu=mu_default):
         DESCRIPTION.
 
     '''
-    return (v**2)/2 - mu/r
+    E = (v**2)/2 - mu/r
+    return E
 
-def tbp0000_Cart_to_Kepler(R,V,mu=mu_default):
+def twb00111_PeriapsisMag(R,V,mu=mu_default):
+    
+    e_vec           = twb00101_eccVec1(R,V,mu)
+    e               = np.linalg.norm(e_vec)
+    r               = np.linalg.norm(R)
+    v               = np.linalg.norm(V)
+    specific_energy = (v**2/2) - mu/r
+    a               = -mu/(2*specific_energy)
+    p_hat           = e_vec/np.linalg.norm(e_vec)
+    r_p             = a*(1-e)*p_hat
+    
+    return r_p
+
+def twb00112_ApoapsisMag(R,V,mu=mu_default):
+    
+    e_vec           = twb00101_eccVec1(R,V,mu)
+    e               = np.linalg.norm(e_vec)
+    r               = np.linalg.norm(R)
+    v               = np.linalg.norm(V)
+    specific_energy = (v**2/2) - mu/r
+    a               = -mu/(2*specific_energy)
+    p_hat           = e_vec/np.linalg.norm(e_vec)
+    r_a             = -a*(1+e)*p_hat
+    
+    return r_a
+
+def twb00111_CartToKepler(R,V,mu=mu_default):
     '''
     
 
@@ -323,15 +358,15 @@ def tbp0000_Cart_to_Kepler(R,V,mu=mu_default):
     
     r               = np.linalg.norm(R)
     v               = np.linalg.norm(V)
-    H               = np.cross(R, V)
+    H               = np.cross(R,V)
     h               = np.linalg.norm(H)
-    e_vec           = tbp0000_EccVec_1(R,V,mu)
-    specific_energy = tbp0000_SpecificEnergy(v, r)
-    a               = -mu/(2*specific_energy)
+    e_vec           = twb00101_eccVec1(R,V,mu)
+    scriptE         = twb00110_SpecificEnergy2(r,v)
+    a               = twb00108_SemiMajorAxis1(scriptE,mu)
     i               = np.arccos(H[2]/h)
-    e               = tbp0000_ecc_1(h,r,mu)   
-    p               = tbp0000_SemiLatusRectum2(h,mu)
-    P               = tbp0000_Period(a,mu)
+    e               = twb00103_ecc2(h,r,mu)   
+    p               = twb00106_SemiLatusRectum2(h,mu)
+    P               = twb00109_Period(a,mu)
     r_p             = a*(1- e)
     r_a             = a*(1+e)
     K               = np.array([0,0,1])
@@ -376,7 +411,7 @@ def tbp0000_Cart_to_Kepler(R,V,mu=mu_default):
                 'nu':               nu*rad2deg,
                 'P':                P,
                 'e_vec':            e_vec,
-                'specific_energy':  specific_energy,
+                'specific_energy':  scriptE,
                 'p':                p,
                 'h':                h,
                 'r_p':              r_p,
@@ -388,34 +423,31 @@ def tbp0000_Cart_to_Kepler(R,V,mu=mu_default):
 
     return kep_elements
 
+#%% Two Body Orbit Vectors
+def twb00201_NodeVector1(R,V):
+    '''
     
-def tbp0000_PeriapsisVec(R,V,mu=mu_default):
-    
-    e_vec           = tbp0000_EccVec_1(R,V,mu)
-    e               = np.linalg.norm(e_vec)
-    r               = np.linalg.norm(R)
-    v               = np.linalg.norm(V)
-    specific_energy = (v**2/2) - mu/r
-    a               = -mu/(2*specific_energy)
-    p_hat           = e_vec/np.linalg.norm(e_vec)
-    r_p_vec         = a*(1-e)*p_hat
-    
-    return r_p_vec
 
-def tbp0000_ApoapsisVec(R,V,mu=mu_default):
-    
-    e_vec           = tbp0000_EccVec_1(R,V,mu)
-    e               = np.linalg.norm(e_vec)
-    r               = np.linalg.norm(R)
-    v               = np.linalg.norm(V)
-    specific_energy = (v**2/2) - mu/r
-    a               = -mu/(2*specific_energy)
-    p_hat           = e_vec/np.linalg.norm(e_vec)
-    r_a_vec         = -a*(1+e)*p_hat
-    
-    return r_a_vec
+    Parameters
+    ----------
+    R : TYPE
+        DESCRIPTION.
+    V : TYPE
+        DESCRIPTION.
 
-def tbp0000_OrbitNormalVector(RAAN,inc):
+    Returns
+    -------
+    N : TYPE
+        DESCRIPTION.
+
+    '''
+    h_vec   = np.cross(R, V)
+    K       = np.array([0,0,1])
+    N       = np.cross(K,h_vec)
+    
+    return N
+
+def twb00204_OrbitNormalVector2(RAAN,inc):
     
     RAAN    = np.deg2rad(RAAN)
     inc     = np.deg2rad(inc)

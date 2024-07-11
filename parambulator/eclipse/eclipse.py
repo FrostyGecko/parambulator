@@ -7,17 +7,7 @@ Created on Sat Jun 15 16:13:10 2024
 """
 
 #%% Initialize
-import matplotlib.pyplot as plt 
 import numpy as np
-np.set_printoptions(precision=3)
-
-try:
-    import os
-    os.system('clear')
-    print('----Program Start----')
-    plt.close("all")
-except:  
-    pass
 
 #%% Functions
 def EclipseType(P1,P2,P3,r1,r2): 
@@ -146,6 +136,27 @@ def OcclusionPercentage(theta,theta1,theta2):
     print('Occlusion%: '+str(occ_per))
     
     return occ_per
+
+def ecl00000_EclipseEC1(P1,P2,P3,r1,r2):
+    
+    eclipseType, theta, theta1, theta2 = EclipseType(P1,P2,P3,r1,r2)
+    occlusion = OcclusionPercentage(theta,theta1,theta2)
+    
+    return eclipseType, occlusion
+
+def ecl00000_EclipseEC2(body1,body2,SCpos):
+    
+    import parambulator.data.planet_data as planet_data
+    import parambulator.ephem.ephem as eph
+    
+    r1  = planet_data[body1]['radius']
+    r2  = planet_data[body2]['radius']
+    P1  = eph.get_position_ICRF[body1]
+    P2  = eph.get_position_ICRF[body2]
+    eclipseType, theta, theta1, theta2 = EclipseType(P1,P2,SCpos,r1,r2)
+    occlusion = OcclusionPercentage(theta,theta1,theta2)
+    
+    return eclipseType, occlusion
     
 def EclipseGeometry(P1,P2,P3,r1,r2):
     #### Calculate Vectors
@@ -173,6 +184,16 @@ def EclipseGeometry(P1,P2,P3,r1,r2):
     
     
 if __name__ == '__main__':
+    
+    try:
+        import os
+        import matplotlib.pyplot as plt
+        os.system('clear')
+        print('----Program Start----')
+        plt.close("all")
+    except:  
+        pass
+    
     #### Constants
     SunRadius       = 695700
     EarthRadius     = 6378.165
