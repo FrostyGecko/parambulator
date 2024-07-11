@@ -17,14 +17,57 @@ spk_filepath = 'spk_files/de440_mars.bsp'
 spk_filepath = 'spk_files/de421.bsp'
 
 def eph00001_load_kernel(spk_filepath):
-    return SPK.open(spk_filepath)
+    '''
+    
+
+    Parameters
+    ----------
+    spk_filepath : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    kernel : TYPE
+        DESCRIPTION.
+
+    '''
+    kernel = SPK.open(spk_filepath)
+    return kernel
 
 def eph00002_get_available_spk_files(spk_folder):
+    '''
+    
+
+    Parameters
+    ----------
+    spk_folder : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    files : TYPE
+        DESCRIPTION.
+
+    '''
     import os
     files =  os.listdir(spk_folder)
     return files
 
 def eph00003_print_available_spk_files(spk_folder):
+    '''
+    
+
+    Parameters
+    ----------
+    spk_folder : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    bool
+        DESCRIPTION.
+
+    '''
     try: 
         files = eph00002_get_available_spk_files(spk_folder)
         try:
@@ -38,97 +81,465 @@ def eph00003_print_available_spk_files(spk_folder):
 
 #%% Position Functions
 def eph00100_get_sun_position_ICRF(kernel,julian_date):
+    '''
+    
+
+    Parameters
+    ----------
+    kernel : TYPE
+        DESCRIPTION.
+    julian_date : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    Sun_position : TYPE
+        DESCRIPTION.
+
+    '''
     Sun_position        = kernel[0,10].compute(julian_date)
     return Sun_position
 
 def eph00101_get_mercury_position_ICRF(kernel,julian_date):
+    '''
+    
+
+    Parameters
+    ----------
+    kernel : TYPE
+        DESCRIPTION.
+    julian_date : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    Mercury_position : TYPE
+        DESCRIPTION.
+
+    '''
     Mercury_position    = kernel[0,1].compute(julian_date)
     return Mercury_position
 
 def eph00102_get_venus_position_ICRF(kernel,julian_date):
+    '''
+    
+
+    Parameters
+    ----------
+    kernel : TYPE
+        DESCRIPTION.
+    julian_date : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    Venus_position : TYPE
+        DESCRIPTION.
+
+    '''
     Venus_position      = kernel[0,2].compute(julian_date)
     return Venus_position
 
 def eph00103_get_earth_position_ICRF(kernel,julian_date):
+    '''
+    
+
+    Parameters
+    ----------
+    kernel : TYPE
+        DESCRIPTION.
+    julian_date : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    Earth_position : TYPE
+        DESCRIPTION.
+
+    '''
     Earth_position      = kernel[0,3].compute(julian_date)
     Earth_position      -= kernel[3,399].compute(julian_date)
     return Earth_position
 
 def eph00104_get_earth_barycenter_position_ICRF(kernel,julian_date):
+    '''
+    
+
+    Parameters
+    ----------
+    kernel : TYPE
+        DESCRIPTION.
+    julian_date : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    Earth_barycenter : TYPE
+        DESCRIPTION.
+
+    '''
     Earth_barycenter      = kernel[0,3].compute(julian_date)
     return Earth_barycenter
     
 def eph00105_get_mars_position_ICRF(kernel,julian_date):
+    '''
+    
+
+    Parameters
+    ----------
+    kernel : TYPE
+        DESCRIPTION.
+    julian_date : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    Mars_position : TYPE
+        DESCRIPTION.
+
+    '''
     Mars_position       = kernel[0,4].compute(julian_date)
     return Mars_position
 
 def eph00106_get_jupiter_position_ICRF(kernel,julian_date):
+    '''
+    
+
+    Parameters
+    ----------
+    kernel : TYPE
+        DESCRIPTION.
+    julian_date : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    Jupiter_position : TYPE
+        DESCRIPTION.
+
+    '''
     Jupiter_position    = kernel[0,5].compute(julian_date)
     return Jupiter_position
 
 def eph00107_get_saturn_position_ICRF(kernel,julian_date):
+    '''
+    
+
+    Parameters
+    ----------
+    kernel : TYPE
+        DESCRIPTION.
+    julian_date : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    Saturn_position : TYPE
+        DESCRIPTION.
+
+    '''
     Saturn_position     = kernel[0,6].compute(julian_date)
     return Saturn_position
 
 def eph00108_get_uranus_position_ICRF(kernel,julian_date):
+    '''
+    
+
+    Parameters
+    ----------
+    kernel : TYPE
+        DESCRIPTION.
+    julian_date : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    Uranus_position : TYPE
+        DESCRIPTION.
+
+    '''
     Uranus_position     = kernel[0,7].compute(julian_date)
     return Uranus_position
 
 def eph00109_get_neptune_position_ICRF(kernel,julian_date):
+    '''
+    
+
+    Parameters
+    ----------
+    kernel : TYPE
+        DESCRIPTION.
+    julian_date : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    Neptune_position : TYPE
+        DESCRIPTION.
+
+    '''
     Neptune_position    = kernel[0,8].compute(julian_date)
     return Neptune_position
 
 def eph00110_get_pluto_position_ICRF(kernel,julian_date):
+    '''
+    
+
+    Parameters
+    ----------
+    kernel : TYPE
+        DESCRIPTION.
+    julian_date : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    Pluto_position : TYPE
+        DESCRIPTION.
+
+    '''
     Pluto_position      = kernel[0,9].compute(julian_date)
     return Pluto_position
 
 def eph00111_get_relative_position_ICRF(from_body_position,to_body_position):
+    '''
+    
+
+    Parameters
+    ----------
+    from_body_position : TYPE
+        DESCRIPTION.
+    to_body_position : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    relative_position : TYPE
+        DESCRIPTION.
+
+    '''
     relative_position = to_body_position - from_body_position
     return relative_position
 
 #%% Velocity Functions
 def eph00200_get_sun_velocity_ICRF(kernel,julian_date):
+    '''
+    
+
+    Parameters
+    ----------
+    kernel : TYPE
+        DESCRIPTION.
+    julian_date : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    Sun_position : TYPE
+        DESCRIPTION.
+
+    '''
     Sun_position        = kernel[0,10].compute_and_differentiate(julian_date)
     return Sun_position
 
 def eph00201_get_mercury_velocity_ICRF(kernel,julian_date):
+    '''
+    
+
+    Parameters
+    ----------
+    kernel : TYPE
+        DESCRIPTION.
+    julian_date : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    Mercury_position : TYPE
+        DESCRIPTION.
+
+    '''
     Mercury_position    = kernel[0,1].compute_and_differentiate(julian_date)
     return Mercury_position
 
 def eph00202_get_venus_velocity_ICRF(kernel,julian_date):
+    '''
+    
+
+    Parameters
+    ----------
+    kernel : TYPE
+        DESCRIPTION.
+    julian_date : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    Venus_position : TYPE
+        DESCRIPTION.
+
+    '''
     Venus_position      = kernel[0,2].compute_and_differentiate(julian_date)
     return Venus_position
 
 def eph00203_get_earth_velocity_ICRF(kernel,julian_date):
+    '''
+    
+
+    Parameters
+    ----------
+    kernel : TYPE
+        DESCRIPTION.
+    julian_date : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    Earth_position : TYPE
+        DESCRIPTION.
+
+    '''
     Earth_position      = kernel[0,3].compute_and_differentiate(julian_date)
     Earth_position      -= kernel[3,399].compute_and_differentiate(julian_date)
     return Earth_position
 
 def eph00204_get_earth_barycenter_velocity_ICRF(kernel,julian_date):
+    '''
+    
+
+    Parameters
+    ----------
+    kernel : TYPE
+        DESCRIPTION.
+    julian_date : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    Earth_barycenter : TYPE
+        DESCRIPTION.
+
+    '''
     Earth_barycenter      = kernel[0,3].compute_and_differentiate(julian_date)
     return Earth_barycenter
     
 def eph00205_get_mars_velocity_ICRF(kernel,julian_date):
+    '''
+    
+
+    Parameters
+    ----------
+    kernel : TYPE
+        DESCRIPTION.
+    julian_date : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    Mars_position : TYPE
+        DESCRIPTION.
+
+    '''
     Mars_position       = kernel[0,4].compute_and_differentiate(julian_date)
     return Mars_position
 
 def eph00206_get_jupiter_velocity_ICRF(kernel,julian_date):
+    '''
+    
+
+    Parameters
+    ----------
+    kernel : TYPE
+        DESCRIPTION.
+    julian_date : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    Jupiter_position : TYPE
+        DESCRIPTION.
+
+    '''
     Jupiter_position    = kernel[0,5].compute_and_differentiate(julian_date)
     return Jupiter_position
 
 def eph00207_get_saturn_velocity_ICRF(kernel,julian_date):
+    '''
+    
+
+    Parameters
+    ----------
+    kernel : TYPE
+        DESCRIPTION.
+    julian_date : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    Saturn_position : TYPE
+        DESCRIPTION.
+
+    '''
     Saturn_position     = kernel[0,6].compute_and_differentiate(julian_date)
     return Saturn_position
 
 def eph00208_get_uranus_velocity_ICRF(kernel,julian_date):
+    '''
+    
+
+    Parameters
+    ----------
+    kernel : TYPE
+        DESCRIPTION.
+    julian_date : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    Uranus_position : TYPE
+        DESCRIPTION.
+
+    '''
     Uranus_position     = kernel[0,7].compute_and_differentiate(julian_date)
     return Uranus_position
 
 def eph00209_get_neptune_velocity_ICRF(kernel,julian_date):
+    '''
+    
+
+    Parameters
+    ----------
+    kernel : TYPE
+        DESCRIPTION.
+    julian_date : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    Neptune_position : TYPE
+        DESCRIPTION.
+
+    '''
     Neptune_position    = kernel[0,8].compute_and_differentiate(julian_date)
     return Neptune_position
 
 def eph00210_get_pluto_velocity_ICRF(kernel,julian_date):
+    '''
+    
+
+    Parameters
+    ----------
+    kernel : TYPE
+        DESCRIPTION.
+    julian_date : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    Pluto_position : TYPE
+        DESCRIPTION.
+
+    '''
     Pluto_position      = kernel[0,9].compute_and_differentiate(julian_date)
     return Pluto_position
 
