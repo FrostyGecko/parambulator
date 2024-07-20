@@ -13,7 +13,7 @@ import parambulator.data.planet_data as planet_data
 #%% Constants
 deg2rad     = np.pi/180  # [rad/deg]
 rad2deg     = 180/np.pi  # [deg/rad]
-mu_default  = planet_data.earth['mu']
+mu_default  = planet_data.planets['earth']['mu']
 
 #%% General
 def LagrangeFG(R0,V0,delta_nu,mu=mu_default):
