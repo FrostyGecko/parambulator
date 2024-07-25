@@ -8,6 +8,7 @@ Created on Sat Jun 15 16:13:10 2024
 
 #%% Initialize
 import numpy as np
+import parambulator.ephem.ephem as eph
 
 #%% Functions
 def EclipseType(P1,P2,P3,r1,r2): 
@@ -136,6 +137,7 @@ def OcclusionPercentage(theta,theta1,theta2):
     print('Occlusion%: '+str(occ_per))
     
     return occ_per
+
 
 def ecl00000_EclipseEC1(P1,P2,P3,r1,r2):
     
