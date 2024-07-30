@@ -210,6 +210,8 @@ if __name__ == '__main__':
     #### Calculate Eclipse
     eclipseType,theta,theta1,theta2 = EclipseType(SunPos,EarthPos,SatPos,SunRadius,EarthRadius)
     occ_per     = OcclusionPercentage(theta, theta1, theta2)
+    
+    
         
 
     
