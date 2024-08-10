@@ -1,14 +1,14 @@
 from setuptools import find_packages, setup
 
-with open("parambulator/README.md", "r") as f:
+with open("README.md", "r") as f:
     long_description = f.read()
 
 setup(
     name="parambulator",
     version="0.0.1",
     description="General purpose orbital mechanics library",
-    package_dir={"": "parambulator"},
-    packages=find_packages(where="parambulator"),
+    package_dir={"": "src/parambulator"},
+    packages=find_packages(where="src/parambulator"),
     long_description=long_description,
     long_description_content_type="text/markdown",
     project_urls={
@@ -24,7 +24,7 @@ setup(
         "Operating System :: OS Independent",
         "Topic :: Scientific/Engineering",
     ],
-    install_requires=["bson < 2.0.0","numpy <= 1.26.4"],
+    install_requires=["numpy >= 2.0.4"],
     extras_require={
         "dev": ["pytest>=7.0", "twine>=4.0.2"],
     },
