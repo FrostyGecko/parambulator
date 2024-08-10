@@ -8,7 +8,7 @@ Created on Tue Jul  9 12:52:53 2024
 #%% Initialize
 import numpy as np
 import pandas as pd
-import parambulator.data.planet_data as planet_data
+import library.planets as planet_data
 
 #%% Constants
 deg2rad     = np.pi/180  # [rad/deg]

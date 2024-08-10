@@ -1,6 +1,6 @@
 
-parambulator/library/kernels/de440s.bsp
-parambulator/library/kernels/de440.bsp
-parambulator/library/kernels/de438.bsp
-parambulator/library/kernels/de435.bsp
-parambulator/library/kernels/de430.bsp
+src/parambulator/library/kernels/de440s.bsp
+src/parambulator/library/kernels/de440.bsp
+src/parambulator/library/kernels/de438.bsp
+src/parambulator/library/kernels/de435.bsp
+src/parambulator/library/kernels/de430.bsp
