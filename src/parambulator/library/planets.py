@@ -1,7 +1,4 @@
-
-J2 = {
-      'earth': 1
-      }
+import constants as con
 
 planets = {
     'sun':      {
@@ -9,7 +6,7 @@ planets = {
                 'parent':   'SolarSystemBarycenter',
                 'radius':   6378,                       # km
                 'mu':       398600.432896939,           # km^3/s
-                'mass':     5972.4E21,                  # kg 
+                'mass':     con.M_sun,                  # kg 
                 },
     
     'earth':    {
@@ -17,8 +14,7 @@ planets = {
                 'parent':   'Sun',
                 'radius':   6378,                       # km
                 'mu':       398600.432896939,           # km^3/s
-                'mass':     5972.4E21,                  # kg
-                'J2':       J2['earth']
+                'mass':     con.M_E,                  # kg
                 }
             }
 

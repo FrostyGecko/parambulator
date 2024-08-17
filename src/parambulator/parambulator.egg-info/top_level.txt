@@ -1,8 +1,0 @@
-app
-core
-library
-orbit
-orbitutils
-plotting
-spacecraft
-thermal
