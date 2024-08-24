@@ -14,7 +14,9 @@ planets = {
                 'parent':   'Sun',
                 'radius':   6378,                       # km
                 'mu':       398600.432896939,           # km^3/s
-                'mass':     con.M_E,                  # kg
+                'mass':     con.M_E,                    # kg
                 }
             }
 
+
+con.GM_E
