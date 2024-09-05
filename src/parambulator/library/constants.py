@@ -6,10 +6,12 @@ class constant():
                  name:str, 
                  value:float,
                  uncertainty:float=0,
-                 unit:str=None,
-                 reference:str=None,
-                 ref_link:str=None,
-                 system:str=None,
+                 unit:str='',
+                 system:str='',
+                 value_ref:str='',
+                 value_ref_link:str='',
+                 u_ref:str='',
+                 u_ref_link:str='',
                  **args):
     
         #### User Defined Attributes
@@ -18,9 +20,11 @@ class constant():
         self.value          = value
         self.u              = uncertainty
         self.unit           = unit
-        self.reference      = reference
-        self.ref_link       = ref_link
         self.system         = system
+        self.value_ref      = value_ref
+        self.value_ref_link = value_ref_link
+        self.u_ref          = u_ref
+        self.u_ref_link     = u_ref_link
         
         #### Units
         self.units_length   = {'mm':0.001, 
@@ -50,190 +54,108 @@ class constant():
                                 'lb':1/2.20462,
                                 'oz':1/35.274}
         
-        self.units_temp_C   = {'mC':0.001,
+        self.units_temp    = {'mC':0.001,
                                 'cC':0.01,
                                 'dC':0.1,
                                 'C':1,
                                 'daC':10,
                                 'hC':100,
-                                'kC':1000}
-        
-        self.units_temp_K   = {'mK':0.001,
+                                'kC':1000,
+                                'mK':0.001,
                                 'cK':0.01,
                                 'dK':0.1,
                                 'K':1,
                                 'daK':10,
                                 'hK':100,
                                 'kK':1000}
-
-        self.derived_units = {'W': ['J/S','(N*m)/s','(kg*m^2)/s^3'],
-                              'J': ['(kg*m^2)/s^3']}
+        
+        self.units_derived = {'W': ['J/S','N*m/s','kg*m^2/s^3'],
+                              'J': ['kg*m^2/s^3'],
+                              'N': ['kg*m/s^2'],
+                              'Pa':['N/m^2','kg/m*s^2'],
+                              'Hz':['1/s'],
+                              'Cp':['J/kg*K','m^2/s^2*K'],
+                              'k': ['W/m*k','m*kg/s^3*K'],
+                              'R': ['1/G','K/W','K*s^3/m^2*kg'],
+                              'G': ['1/R','W/K','m^2*kg/K*s^3'],
+                              'C': ['J/K','m^2*kg/s^2*K']
+                              }
+        
+        self.metric_conversions = {'m':0.001,
+                                'c':0.01,
+                                'd':0.1,
+                                '1':1,
+                                'da':10,
+                                'h':100,
+                                'k':1000,
+                                }
+        
+        self.SI_units        = {'mass':self.units_mass,
+                               'time':self.units_time,
+                               'length':self.units_length,
+                               'angle':self.units_angle,
+                               'temperature':self.units_temp,
+                               'derived':self.units_derived,
+                               }
                                   
     #%% Dunder Methods
     def __repr__(self) -> str:
         return str(self.value)
     
-    def __add__(self,add_val) -> float:
-        '''
-        Dunder add method.
-        
-        Parameters
-        ----------
-        add_val : float
-            Dunder method input.
-
-        If dunder input is float, returns self.value + add_val.
-        If dunder input is another constant, returns summed value and combined uncertainty
-            
-        Returns 
-        -------
-        float: value
-        
-        OR
-        
-        float: value
-            self.value+add_val
-        float: value
-            combined uncertainty
-            
-        '''
+    def __add__(self,val) -> float:
+        try:
+            return float(self.value+val)
+        except:
+            pass
         
         try:
-            return float(self.value+add_val)
+            return float(self.value+val.val())
         except:
-            add_u       = add_val.u
-            
-            value       = float(self.value-add_val.val())
-            u           = float(np.sqrt(self.u**2 + add_u**2))
-            return value,u
-    
-    def __sub__(self,sub_val) -> float:
-        '''
-        Dunder subtract method.
-        
-        Parameters
-        ----------
-        sub_val : float
-            Dunder method input.
+            return False
 
-        If dunder input is float, returns self.value - sub_val.
-        If dunder input is another constant, returns subtracted value and combined uncertainty
-            
-        Returns 
-        -------
-        float: value
-        
-        OR
-        
-        float: value
-            self.value-sub_val
-        float: value
-            combined uncertainty
-            
-        '''
+    def __sub__(self,val) -> float:
         try:
-            return float(self.value-sub_val)
+            return float(self.value-val)
         except:
-            sub_u       = sub_val.u
-            
-            value       = float(self.value-sub_val.val())
-            u           = float(np.sqrt(self.u**2 + sub_u**2))
-            return value,u
-    
-    def __mul__(self,mul_val) -> float:
-        '''
-        Dunder multiply method.
-        
-        Parameters
-        ----------
-        mul_val : float
-            Dunder method input.
-
-        If dunder input is float, returns self.value*mul_val.
-        If dunder input is another constant, returns multiplied value and combined uncertainty
-            
-        Returns 
-        -------
-        float: value
-        
-        OR
-        
-        float: value
-            self.value*mul_val
-        float: value
-            combined uncertainty
-            
-        '''
+            pass
         
         try:
-            return float(self.value*mul_val)
+            return float(self.value-val.val())
         except:
-            mul_value   = mul_val.val()
-            mul_u       = mul_val.u
-            value       = float(self.value*mul_value)
-            u           = float(value*np.sqrt((self.u/self.value)**2 + (mul_u/mul_value)**2))
-            return value,u
+            return False
     
-    def __truediv__(self,div_val) -> float:
-        '''
-        Dunder divide method.
-        
-        Parameters
-        ----------
-        div_val : float
-            Dunder method input.
-
-        If dunder input is float, returns self.value/div_val.
-        If dunder input is another constant, returns divided value and combined uncertainty
-            
-        Returns 
-        -------
-        float: value
-        
-        OR
-        
-        float: value
-            self.value/div_val
-        float: value
-            combined uncertainty
-            
-        '''
+    def __mul__(self,val) -> float:
         try:
-            return float(self.value/div_val)
+            return float(self.value*val)
         except:
-            div_value   = div_val.val()
-            div_u       = div_val.u
-            value       = float(self.value/div_value)
-            u           = float(value*np.sqrt((self.u/self.value)**2 + (div_u/div_value)**2))
-            return value,u
+            pass
         
-    def __pow__(self,power) -> float:
-        '''
-        Dunder power method.
-        
-        Parameters
-        ----------
-        power : float
-            Dunder method input.
-
-        If dunder input is float, returns self.value + add_val.
-        If dunder input is another constant, returns powered value and combined uncertainty
-            
-        Returns 
-        -------
-        float: value
-        
-        OR
-        
-        float: value
-            self.value**pow_val
-        float: value
-            combined uncertainty
-            
-        '''
-        return float(self.value**power)
+        try:
+            return float(self.value*val.val())
+        except:
+            return False
     
-    
+    def __truediv__(self,val) -> float:
+        try:
+            return float(self.value/val)
+        except:
+            pass
+        
+        try:
+            return float(self.value/val.val())
+        except:
+            return False
+        
+    def __pow__(self,val) -> float:
+        try:
+            return float(self.value**val)
+        except:
+            pass
+        
+        try:
+            return float(self.value**val.val())
+        except:
+            return False
 
         
     #%% Normal Methods
@@ -249,61 +171,74 @@ class constant():
         '''
         return float(self.value)
     
-    def get_available_conversions(self):
-        if self.unit in self.units_angle.keys():
-            return print(list(self.units_angle.keys()))
-        if self.unit in self.units_length.keys():
-            return print(list(self.units_length.keys()))
-        if self.unit in self.units_mass.keys():
-            return print(list(self.units_mass.keys()))
-        if self.unit in self.units_time.keys():
-            return print(list(self.units_time.keys()))
-        if self.unit in self.units_temp_C.keys():
-            return print(list(self.units_temp_C.keys()))
-        if self.unit in self.units_temp_K.keys():
-            return print(list(self.units_temp_K.keys()))
-        if self.unit in self.units_temp_F.keys():
-            return print(list(self.units_temp_F.keys()))
+    def get_available_conversions(self,from_unit:str = None):
+
+        if from_unit is None:
+            from_unit = self.unit
+        
+        keys = self.SI_units.keys()
+        for key in keys:
+            if from_unit in self.SI_units[key].keys():
+                print(list(self.SI_units[key].keys()))
     
     #%% Single Unit Methods
     def to_unit(self,value,unit_from,unit_to,unit_conversion_dictionary):
-        if unit_to not in unit_conversion_dictionary:
+        
+        #### Error Check
+        if unit_to not in unit_conversion_dictionary: # Check if to unit is in supplied dictionary
             print('End unit not supported')
             return False
-        elif unit_from not in unit_conversion_dictionary:
-            print('From unit not in correct system')
+        elif unit_from not in unit_conversion_dictionary: # check if from unit is in supplied dictionary
+            print('From unit not supported')
             return False
         else:
-            pass
+            pass # If unit existance checks are good, pass and continue onto main function
+            
+        #### Convert value to new unit    
+        new_value   = value*unit_conversion_dictionary[unit_from] / unit_conversion_dictionary[unit_to]
         
-        new_value = value * unit_conversion_dictionary[unit_from] / unit_conversion_dictionary[unit_to]
+        #### Convert uncertainty attribute to new unit if it exists. Only works with attribute
+        if self.u is None:
+            new_u = False
+        else:
+            new_u = self.u*unit_conversion_dictionary[unit_from] / unit_conversion_dictionary[unit_to]
         
+        return new_value,new_u
         
-        return new_value
+    def to_temp(self,unit_to:str,
+               unit_from:str = None,
+               value:str = None,
+               units:dict = None,
+               **kwargs) -> float:
         
-    def to_temp(self,unit_out: str) -> float:
+        if unit_from is None:
+            unit_from   = self.unit
+            
+        if value is None:
+            value       = self.value 
         
-        value = self.value
-        
-        if self.unit == 'K':
-            if unit_out in self.units_temp_K:
-                return self.to_unit(unit_out,self.units_temp_K)
-            if unit_out == 'C':
+        if unit_from == 'K':
+            if unit_to in self.units_temp_K:
+                return self.to_unit(value,unit_from,unit_to,self.units_temp_K)
+            if unit_to == 'C':
                 return value - 273.15
-            if unit_out == 'F':
+            if unit_to == 'F':
                 return ((value-273.15)*(9/5)) + 32
-        if self.unit == 'C':
-            if unit_out in self.units_temp_C:
-                return self.to_unit(unit_out,self.units_temp_C)
-            if unit_out == 'K':
+        elif unit_from  == 'C':
+            if unit_to in self.units_temp_C:
+                return self.to_unit(value,unit_from,unit_to,self.units_temp_C)
+            if unit_to == 'K':
                 return value + 273.15
-            if unit_out == 'F':
+            if unit_to == 'F':
                 return (value*(9/5)) + 32
-        if self.unit == 'F':
-            if unit_out == 'C':
+        elif unit_from  == 'F':
+            if unit_to == 'C':
                 return (value-32)*(5/9)
-            if unit_out == 'K':
+            if unit_to == 'K':
                 return (value-32)*(5/9) + 273.15
+        else:
+            print('problem')
+            return False
     
     def convert(self,unit_to:str) -> float:
         '''
@@ -321,10 +256,8 @@ class constant():
             DESCRIPTION.
 
         '''
-        self.value          = self.to(unit_to)
-        self.uncertainty    = 3.15
-        self.unit           = unit_to
-        
+        self.value      = self.to(unit_to)
+        self.unit       = unit_to
         return self.value
         
     def to(self,unit_to:str,
@@ -362,7 +295,6 @@ class constant():
             print('Problem')
             return False
         
-
     def to_multi_unit(self,unit_to):
             value       = self.value
             unit        = self.unit.replace('(','').replace(')','').replace('**','^')   
@@ -386,7 +318,7 @@ class constant():
                 
                 if unit_from in self.units_length.keys():
                     
-                    factor = self._to_unit(1,unit_from,unit_to,self.units_length)
+                    factor = self.to_unit(1,unit_from,unit_to,self.units_length)
                     factor = factor**power
                 else:
                     factor = 1
@@ -402,7 +334,7 @@ class constant():
                 
                 if unit_from in self.units_length.keys():
                     
-                    factor = self._to_unit(1,unit_from,unit_to,self.units_length)
+                    factor = self.to_unit(1,unit_from,unit_to,self.units_length)
                     factor = factor**power
                 else:
                     factor = 1
@@ -411,44 +343,126 @@ class constant():
                 
             return value
 
-        
+
+#%% Template
+template   = constant(
+                    abbrev          = 'template',
+                    name            = '',
+                    value           = 5.670374419*(10**(-8)),
+                    uncertainty     = 0,
+                    unit            = '',
+                    value_ref       = '',
+                    value_ref_link  = '',
+                    u_ref           = '',
+                    u_ref_link      = ''
+                   )
+
+#%% Fundamental Physical Constants
+sigma   = constant(abbrev           = 'sigma',
+                   name             = 'Stefan-Boltzmann constant',
+                   value            = 5.670374419*(10**(-8)),
+                   uncertainty      = 0,
+                   unit             = 'W/(m^2*K^4)',
+                   value_ref        = 'NIST',
+                   value_ref_link   = 'https://physics.nist.gov/cgi-bin/cuu/Value?sigma',
+                   u_ref            = 'NIST',
+                   u_ref_link       = 'https://physics.nist.gov/cgi-bin/cuu/Value?sigma'
+                   )
+
 #%% Astronomical Constants
-G       = constant('G',
-                   'gravitational constant',
-                   6.67428*(10**(-11)),
-                   6.7*(10**(-15)),
-                   '(m^3)/(kg*s^2)',
-                   'IAU',
-                   'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf',
-                   'SI')
+G       = constant(
+                    abbrev          = 'G',
+                    name            = 'gravitational constant',
+                    value           = 6.67428*(10**(-11)),
+                    uncertainty     = 6.7*(10**(-15)),
+                    unit            = '(m^3)/(kg*s^2)',
+                    value_ref       = 'IAU',
+                    value_ref_link  = 'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf',
+                    u_ref           = 'IAU',
+                    u_ref_link      = 'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf'
+                   )
 
-c       = constant('c',
-                   'speed of light',
-                   299792458.0,
-                   0,
-                   'm/s',
-                   None,
-                   None,
-                   'SI')
+c       = constant(
+                    abbrev          = 'c',
+                    name            = 'speed of light',
+                    value           = 299792458.0,
+                    uncertainty     = 0,
+                    unit            = 'm/s',
+                    value_ref       = '',
+                    value_ref_link  = '',
+                    u_ref           = '',
+                    u_ref_link      = ''
+                   )
 
-tau_A   = constant('a_e',
-                   'Light-time',
-                   499.0047863852,
-                   4.0*(10**-11),
-                   's',
-                   'IERS Conventions (2003)',
-                   'https://web.archive.org/web/20131219165433/http://www.iers.org/IERS/EN/Publications/TechnicalNotes/tn32.html',
-                   'SI')
+tau_A   = constant(
+                    abbrev          = 'tau_A',
+                    name            = 'light-time',
+                    value           = 499.0047863852,
+                    uncertainty     = 4.0*(10**-11),
+                    unit            = 's',
+                    value_ref       = 'IERS Conventions (2003)',
+                    value_ref_link  = 'https://web.archive.org/web/20131219165433/http://www.iers.org/IERS/EN/Publications/TechnicalNotes/tn32.html',
+                    u_ref           = 'IERS Conventions (2003)',
+                    u_ref_link      = 'https://web.archive.org/web/20131219165433/http://www.iers.org/IERS/EN/Publications/TechnicalNotes/tn32.html'
+                   )
 
-AU      = constant('AU',
-                   'astronomical unit',
-                   1.49597870700*(10**11),
-                   3,
-                   'm',
-                   'IAU',
-                   'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf',
-                   'SI')
+AU   = constant(
+                    abbrev          = 'AU',
+                    name            = 'astronomical unit',
+                    value           = 1.49597870700*(10**11),
+                    uncertainty     = 3,
+                    unit            = 'm',
+                    value_ref       = 'IAU',
+                    value_ref_link  = 'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf',
+                    u_ref           = 'IAU',
+                    u_ref_link      = 'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf'
+                   )
 
+#%% Planetary Values
+#%%% Planetary J2 Values
+J2_earth    = constant(
+                    abbrev          = 'J2_earth',
+                    name            = 'J2 constant for Earth',
+                    value           = 0.0010826359,
+                    uncertainty     = 1*(10**-10),
+                    unit            = '',
+                    value_ref       = 'IAU',
+                    value_ref_link  = 'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf',
+                    u_ref           = 'IAU',
+                    u_ref_link      = 'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf'
+                   )
+
+J2_mars     = constant(
+                    abbrev          = 'J2_mars',
+                    name            = 'J2 constant for Mars',
+                    value           = 0.001964,
+                    uncertainty     = None,
+                    unit            = '',
+                    value_ref       = '',
+                    value_ref_link  = 'http://astro.vaporia.com/start/j2.html',
+                   )
+
+J2_jupiter  = constant(
+                    abbrev          = 'J2_jupiter',
+                    name            = 'J2 constant for Jupiter',
+                    value           = 0.01475,
+                    uncertainty     = None,
+                    unit            = '',
+                    value_ref       = '',
+                    value_ref_link  = 'http://astro.vaporia.com/start/j2.html',
+                   )
+
+J2_saturn   = constant(
+                    abbrev          = 'J2_saturn',
+                    name            = 'J2 constant for Saturn',
+                    value           = 0.01656,
+                    uncertainty     = None,
+                    unit            = '',
+                    value_ref       = '',
+                    value_ref_link  = 'http://astro.vaporia.com/start/j2.html',
+                   )
+
+#%%% Earth System Values
 e_J2000 = constant('e_J2000',
                    'Obliquity of the ecliptic at J2000.0',
                    8.4381406*(10**4),
@@ -456,40 +470,6 @@ e_J2000 = constant('e_J2000',
                    'arcseconds',
                    'IAU',
                    'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf')
-
-#%% Planetary Values
-#%%% Planetary J2 Values
-J2_earth    = constant('J2_earth',
-                   'J2 constant for Earth',
-                   0.0010826359,
-                   1*(10**-10),
-                   None,
-                   'IAU',
-                   'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf')
-
-J2_mars     = constant('J2_mars',
-                   'J2 constant for Mars',
-                   0.001964,
-                   0,
-                   None,
-                   None,
-                   'http://astro.vaporia.com/start/j2.html')
-
-J2_jupiter  = constant('J2_jupiter',
-                   'J2 constant for Jupiter',
-                   0.01475,
-                   0,
-                   None,
-                   None,
-                   'http://astro.vaporia.com/start/j2.html')
-
-J2_saturn   = constant('J2_saturn',
-                   'J2 constant for Saturn',
-                   0.01656,
-                   0,
-                   None,
-                   None,
-                   'http://astro.vaporia.com/start/j2.html')
 
 #%%% Planetary Gravitational Parameters
 GM_sun  = constant('GM_sun',
@@ -591,7 +571,6 @@ M_Sun   = constant('M_Sun',
                    'IAU',
                    'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf')
 
-
 M_Me    = constant('M_Me',
                    'Mass of Mercury',
                    (M_Sun/Ms_Mme)[0],
@@ -599,8 +578,7 @@ M_Me    = constant('M_Me',
                    'kg',
                    'IAU',
                    'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf',
-                   'SI')
-
+                   )
 
 M_Ve    = constant('M_Ve',
                    'Mass of Venus',
@@ -609,7 +587,7 @@ M_Ve    = constant('M_Ve',
                    'kg',
                    'IAU',
                    'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf',
-                   'SI')
+                   )
 
 M_E     = constant('M_E',
                    'Mass of the Earth',
@@ -618,7 +596,7 @@ M_E     = constant('M_E',
                    'kg',
                    'IAU',
                    'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf',
-                   'SI')
+                   )
 
 M_M     = constant('M_M',
                    'Mass of Luna',
@@ -627,7 +605,7 @@ M_M     = constant('M_M',
                    'kg',
                    'IAU',
                    'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf',
-                   'SI')
+                   )
 
 M_Ma    = constant('M_Ma',
                    'Mass of Mars',
@@ -636,7 +614,7 @@ M_Ma    = constant('M_Ma',
                    'kg',
                    'IAU',
                    'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf',
-                   'SI')
+                   )
 
 M_J     = constant('M_J',
                    'Mass of Jupiter',
@@ -645,7 +623,7 @@ M_J     = constant('M_J',
                    'kg',
                    'IAU',
                    'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf',
-                   'SI')
+                   )
 
 M_Sa     = constant('M_sa',
                    'Mass of Saturn',
@@ -654,7 +632,7 @@ M_Sa     = constant('M_sa',
                    'kg',
                    'IAU',
                    'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf',
-                   'SI')
+                   )
 
 M_U     = constant('M_U',
                    'Mass of Uranus',
@@ -663,7 +641,7 @@ M_U     = constant('M_U',
                    'kg',
                    'IAU',
                    'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf',
-                   'SI')
+                   )
 
 M_N     = constant('M_U',
                    'Mass of Neptune',
@@ -672,7 +650,7 @@ M_N     = constant('M_U',
                    'kg',
                    'IAU',
                    'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf',
-                   'SI')
+                   )
 
 M_P     = constant('M_U',
                    'Mass of Pluto',
@@ -681,7 +659,7 @@ M_P     = constant('M_U',
                    'kg',
                    'IAU',
                    'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf',
-                   'SI')
+                   )
 
 M_charon= constant('M_charon',
                    'Mass of Charon',
@@ -690,7 +668,7 @@ M_charon= constant('M_charon',
                    'kg',
                    'Brozović, Marina; Jacobson, Robert A. (May 8, 2024)',
                    'https://doi.org/10.3847%2F1538-3881%2Fad39f0',
-                   'SI')
+                   )
 
 M_Pbc   = constant('M_Pbc',
                    'Mass of Pluto Barycenter',
@@ -698,6 +676,6 @@ M_Pbc   = constant('M_Pbc',
                    (M_P+M_charon)[1],
                    'kg',
                    'IAU and Brozović, Marina; Jacobson, Robert A. (May 8, 2024)',
-                   'SI')
+                   )
 
 
