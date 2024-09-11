@@ -463,118 +463,141 @@ J2_saturn   = constant(
                    )
 
 #%%% Earth System Values
-e_J2000 = constant('e_J2000',
-                   'Obliquity of the ecliptic at J2000.0',
-                   8.4381406*(10**4),
-                   1*(10**(-3)),
-                   'arcseconds',
-                   'IAU',
-                   'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf')
+e_J2000   = constant(
+                    abbrev          = 'e_J2000',
+                    name            = 'Obliquity of the ecliptic at J2000.0',
+                    value           = 8.4381406*(10**4),
+                    uncertainty     = 1*(10**(-3)),
+                    unit            = 'arcseconds',
+                    value_ref       = 'IAU',
+                    value_ref_link  = 'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf',
+                   )
 
 #%%% Planetary Gravitational Parameters
-GM_sun  = constant('GM_sun',
-                   'Heliocentric graviational constant, TCB-compatible',
-                   1.32712442099*(10**20),
-                   1*(10**10),
-                   'm**3/s**2',
-                   'IAU',
-                   'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf')
+GM_sun   = constant(
+                    abbrev          = 'GM_sun',
+                    name            = 'Heliocentric graviational constant, TCB-compatible',
+                    value           = 1.32712442099*(10**20),
+                    uncertainty     = 1*(10**10),
+                    unit            = 'm**3/s**2',
+                    value_ref       = 'IAU',
+                    value_ref_link  = 'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf',
+                   )
 
-GM_E    = constant('GM_E',
-                   'Geocentric graviational constant, TCB-compatible',
-                   3.986004418*(10**14),
-                   1*(10**10),
-                   'm**3/s**2',
-                   'IAU',
-                   'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf')
+GM_E   = constant(
+                    abbrev          = 'GM_E',
+                    name            = 'Geocentric graviational constant, TCB-compatible',
+                    value           = 3.986004418*(10**14),
+                    uncertainty     = 1*(10**10),
+                    unit            = 'm**3/s**2',
+                    value_ref       = 'IAU',
+                    value_ref_link  = 'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf',
+                   )
 
 #%%% Planetary Mass Ratios
-Ms_Mme  = constant('Ms_Mme',
-                   'Ratio of Sun mass to Mercury mass',
-                   6.0236*(10**6),
-                   3*(10**2),
-                   None,
-                   'IAU',
-                   'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf')
+Ms_Mme   = constant(
+                    abbrev          = 'Ms_Mme',
+                    name            = 'Ratio of Sun mass to Mercury mass',
+                    value           = 6.0236*(10**6),
+                    uncertainty     = 3*(10**2),
+                    unit            = '',
+                    value_ref       = 'IAU',
+                    value_ref_link  = 'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf',
+                   )
 
-Ms_Mve  = constant('Ms_Mve',
-                   'Ratio of Sun mass to Venus mass',
-                   4.08523719*(10**5),
-                   8*(10**-3),
-                   None,
-                   'IAU',
-                   'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf')
+Ms_Mve   = constant(
+                    abbrev          = 'Ms_Mve',
+                    name            = 'Ratio of Sun mass to Venus mass',
+                    value           = 4.08523719*(10**5),
+                    uncertainty     = 8*(10**-3),
+                    unit            = '',
+                    value_ref       = 'IAU',
+                    value_ref_link  = 'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf',
+                   )
 
+Mm_Me   = constant(
+                    abbrev          = 'Mm_Me',
+                    name            = 'Ratio of Moon mass to Earth mass',
+                    value           = 1.23000371*(10**-2),
+                    uncertainty     = 4*(10**-10),
+                    unit            = '',
+                    value_ref       = 'IAU',
+                    value_ref_link  = 'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf',
+                   )
 
-Mm_Me  = constant('Mm_Me',
-                   'Ratio of Moon mass to Earth mass',
-                   1.23000371*(10**-2),
-                   4*(10**-10),
-                   None,
-                   'IAU',
-                   'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf')
+Ms_Mma   = constant(
+                    abbrev          = 'Ms_Mma',
+                    name            = 'Ratio of Sun mass to Mars mass',
+                    value           = 3.09870359*(10**6),
+                    uncertainty     = 2*(10**-2),
+                    unit            = '',
+                    value_ref       = 'IAU',
+                    value_ref_link  = 'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf',
+                   )
 
-Ms_Mma  = constant('Ms_Mve',
-                   'Ratio of Sun mass to Mars mass',
-                   3.09870359*(10**6),
-                   2*(10**-2),
-                   None,
-                   'IAU',
-                   'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf')
+Ms_Mj   = constant(
+                    abbrev          = 'Ms_Mj',
+                    name            = 'Ratio of Sun mass to Jupiter mass',
+                    value           = 1.047348644*(10**6),
+                    uncertainty     = 1.7*(10**-5),
+                    unit            = '',
+                    value_ref       = 'IAU',
+                    value_ref_link  = 'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf',
+                   )
 
-Ms_Mj   = constant('Ms_Mj',
-                   'Ratio of Sun mass to Jupiter mass',
-                   1.047348644*(10**6),
-                   1.7*(10**-5),
-                   None,
-                   'IAU',
-                   'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf')
+Ms_Msa   = constant(
+                    abbrev          = 'Ms_Msa',
+                    name            = 'Ratio of Sun mass to Saturn mass',
+                    value           = 3.4979018*(10**3),
+                    uncertainty     = 1*(10**-4),
+                    unit            = '',
+                    value_ref       = 'IAU',
+                    value_ref_link  = 'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf',
+                   )
 
-Ms_Msa   = constant('Ms_Msa',
-                   'Ratio of Sun mass to Saturn mass',
-                   3.4979018*(10**3),
-                   1*(10**-4),
-                   None,
-                   'IAU',
-                   'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf')
+Ms_Mu   = constant(
+                    abbrev          = 'Ms_Mu',
+                    name            = 'Ratio of Sun mass to Uranus mass',
+                    value           = 2.290298*(10**4),
+                    uncertainty     = 3*(10**-2),
+                    unit            = '',
+                    value_ref       = 'IAU',
+                    value_ref_link  = 'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf',
+                   )
 
-Ms_Mu   = constant('Ms_Mu',
-                   'Ratio of Sun mass to Uranus mass',
-                   2.290298*(10**4),
-                   3*(10**-2),
-                   None,
-                   'IAU',
-                   'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf')
+Ms_Mn   = constant(
+                    abbrev          = 'Ms_Mn',
+                    name            = 'Ratio of Sun mass to Neptune mass',
+                    value           = 1.941226*(10**4),
+                    uncertainty     = 3*(10**-2),
+                    unit            = '',
+                    value_ref       = 'IAU',
+                    value_ref_link  = 'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf',
+                   )
 
-Ms_Mn   = constant('Ms_Mn',
-                   'Ratio of Sun mass to Neptune mass',
-                   1.941226*(10**4),
-                   3*(10**-2),
-                   None,
-                   'IAU',
-                   'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf')
-
-Ms_Mp   = constant('Ms_Mp',
-                   'Ratio of Sun mass to Pluto mass',
-                   1.36566*(10**8),
-                   2.8*(10**4),
-                   None,
-                   'IAU',
-                   'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf')
+Ms_Mp   = constant(
+                    abbrev          = 'Ms_Mp',
+                    name            = 'Ratio of Sun mass to Pluto mass',
+                    value           = 1.36566*(10**8),
+                    uncertainty     = 2.8*(10**4),
+                    unit            = '',
+                    value_ref       = 'IAU',
+                    value_ref_link  = 'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf',
+                   )
 
 #%%% Planetary Masses
 M_Sun   = constant('M_Sun',
                    'Mass of the sun',
-                   (GM_sun/G)[0],
-                   (GM_sun/G)[1],
+                   (GM_sun/G),
+                   (GM_sun/G),
                    'kg',
                    'IAU',
                    'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf')
 
 M_Me    = constant('M_Me',
                    'Mass of Mercury',
-                   (M_Sun/Ms_Mme)[0],
-                   (M_Sun/Ms_Mme)[1],
+                   (M_Sun/Ms_Mme),
+                   (M_Sun/Ms_Mme),
                    'kg',
                    'IAU',
                    'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf',
@@ -582,8 +605,8 @@ M_Me    = constant('M_Me',
 
 M_Ve    = constant('M_Ve',
                    'Mass of Venus',
-                   (M_Sun/Ms_Mve)[0],
-                   (M_Sun/Ms_Mve)[1],
+                   (M_Sun/Ms_Mve),
+                   (M_Sun/Ms_Mve),
                    'kg',
                    'IAU',
                    'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf',
@@ -591,8 +614,8 @@ M_Ve    = constant('M_Ve',
 
 M_E     = constant('M_E',
                    'Mass of the Earth',
-                   (GM_E/G)[0],
-                   (GM_E/G)[1],
+                   (GM_E/G),
+                   (GM_E/G),
                    'kg',
                    'IAU',
                    'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf',
@@ -600,8 +623,8 @@ M_E     = constant('M_E',
 
 M_M     = constant('M_M',
                    'Mass of Luna',
-                   (Mm_Me*M_E)[0],
-                   (Mm_Me*M_E)[1],
+                   (Mm_Me*M_E),
+                   (Mm_Me*M_E),
                    'kg',
                    'IAU',
                    'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf',
@@ -609,8 +632,8 @@ M_M     = constant('M_M',
 
 M_Ma    = constant('M_Ma',
                    'Mass of Mars',
-                   (M_Sun/Ms_Mma)[0],
-                   (M_Sun/Ms_Mma)[1],
+                   (M_Sun/Ms_Mma),
+                   (M_Sun/Ms_Mma),
                    'kg',
                    'IAU',
                    'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf',
@@ -618,8 +641,8 @@ M_Ma    = constant('M_Ma',
 
 M_J     = constant('M_J',
                    'Mass of Jupiter',
-                   (M_Sun/Ms_Mj)[0],
-                   (M_Sun/Ms_Mj)[1],
+                   (M_Sun/Ms_Mj),
+                   (M_Sun/Ms_Mj),
                    'kg',
                    'IAU',
                    'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf',
@@ -627,8 +650,8 @@ M_J     = constant('M_J',
 
 M_Sa     = constant('M_sa',
                    'Mass of Saturn',
-                   (M_Sun/Ms_Msa)[0],
-                   (M_Sun/Ms_Msa)[1],
+                   (M_Sun/Ms_Msa),
+                   (M_Sun/Ms_Msa),
                    'kg',
                    'IAU',
                    'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf',
@@ -636,8 +659,8 @@ M_Sa     = constant('M_sa',
 
 M_U     = constant('M_U',
                    'Mass of Uranus',
-                   (M_Sun/Ms_Mu)[0],
-                   (M_Sun/Ms_Mu)[1],
+                   (M_Sun/Ms_Mu),
+                   (M_Sun/Ms_Mu),
                    'kg',
                    'IAU',
                    'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf',
@@ -645,8 +668,8 @@ M_U     = constant('M_U',
 
 M_N     = constant('M_U',
                    'Mass of Neptune',
-                   (M_Sun/Ms_Mn)[0],
-                   (M_Sun/Ms_Mn)[1],
+                   (M_Sun/Ms_Mn),
+                   (M_Sun/Ms_Mn),
                    'kg',
                    'IAU',
                    'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf',
@@ -654,8 +677,8 @@ M_N     = constant('M_U',
 
 M_P     = constant('M_U',
                    'Mass of Pluto',
-                   (M_Sun/Ms_Mp)[0],
-                   (M_Sun/Ms_Mp)[1],
+                   (M_Sun/Ms_Mp),
+                   (M_Sun/Ms_Mp),
                    'kg',
                    'IAU',
                    'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf',
@@ -672,8 +695,8 @@ M_charon= constant('M_charon',
 
 M_Pbc   = constant('M_Pbc',
                    'Mass of Pluto Barycenter',
-                   (M_P+M_charon)[0],
-                   (M_P+M_charon)[1],
+                   (M_P+M_charon),
+                   (M_P+M_charon),
                    'kg',
                    'IAU and Brozović, Marina; Jacobson, Robert A. (May 8, 2024)',
                    )

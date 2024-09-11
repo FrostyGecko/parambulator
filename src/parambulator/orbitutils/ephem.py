@@ -13,8 +13,8 @@ from jplephem.spk import SPK
 #https://space.stackexchange.com/questions/51068/is-it-posible-to-convert-jpl-horizons-vectors-to-ecef/51077?noredirect=1
 
 #%% Defaults
-spk_filepath    = 'spk_files/de440_mars.bsp'
-spk_folder      = 'spk_files'
+spk_filepath    = '../library/kernels/de440.bsp'
+spk_folder      = '../library/kernels/'
 
 #%% General Ephemeris Functions
 def eph00001_load_kernel(spk_filepath):
@@ -769,10 +769,10 @@ def get_relative_position_ICRF2(fromPos,to_body,julian_date,kernel):
 if __name__ == '__main__':
     julian_date = 2460489.547616
     
-    kernels     = eph00002_get_available_spk_files('spk_files/')
-    for kernel in kernels:
-        kernel      = eph00001_load_kernel('spk_files/de440.bsp')
-        position    = kernel[0,1].compute_and_differentiate(julian_date)
-        print(position)
+    kernels     = eph00002_get_available_spk_files(spk_folder)
+    # for kernel in kernels:
+    #     kernel      = eph00001_load_kernel('spk_files/de440.bsp')
+    #     position    = kernel[0,1].compute_and_differentiate(julian_date)
+    #     print(position)
     
     

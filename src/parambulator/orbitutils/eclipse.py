@@ -8,7 +8,7 @@ Created on Sat Jun 15 16:13:10 2024
 
 #%% Initialize
 import numpy as np
-import parambulator.ephem.ephem as eph
+import ephem as eph
 
 #%% Functions
 def EclipseType(P1,P2,P3,r1,r2): 
@@ -184,13 +184,14 @@ def EclipseGeometry(P1,P2,P3,r1,r2):
     d       = np.sin(theta)*D32
     s       = np.cos(theta)*D32
     
-    
+
+
+
 if __name__ == '__main__':
     
     try:
         import os
         import matplotlib.pyplot as plt
-        os.system('clear')
         print('----Program Start----')
         plt.close("all")
     except:  

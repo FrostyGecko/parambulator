@@ -4,7 +4,7 @@ save_data_on_exit = True
 save_history = True
 save_non_project_files = False
 project_type = 'empty-project-type'
-recent_files = ['../../../../Projects/Bible Study/Bible Study Package/MountSinai/BibleGatewayDownload.py', '../../../../Projects/Bible Study/Bible Study Package/MountSinai/BibleGateway-to-Markdown/README.md', '../../../../Projects/Bible Study/Bible Study Package/MountSinai/BibleGateway-to-Markdown/test.py']
+recent_files = ['library/constants.py']
 
 [main]
 version = 0.2.0
