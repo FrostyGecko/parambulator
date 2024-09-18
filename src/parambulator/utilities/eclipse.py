@@ -8,10 +8,15 @@ Created on Sat Jun 15 16:13:10 2024
 
 #%% Initialize
 import numpy as np
-import ephem as eph
 
 #%% Functions
-def EclipseType(P1,P2,P3,r1,r2): 
+def EclipseType(P1,
+                P2,
+                P3,
+                r1,
+                r2,
+                verbose=False,
+                **args): 
     '''
     Source: https://celestrak.org/columns/v03n01/
 
@@ -41,6 +46,10 @@ def EclipseType(P1,P2,P3,r1,r2):
 
     '''
     #### Calculate Vectors
+    P1 = np.asarray(P1)
+    P2 = np.asarray(P2)
+    P3 = np.asarray(P3)
+    
     R31     = P1 - P3
     R21     = P1 - P2
     R32     = P2 - P3
@@ -58,21 +67,33 @@ def EclipseType(P1,P2,P3,r1,r2):
     #### Calculate Eclipse Type
     if D31 < D21:
         eclipseType     = -1
-        print('Object inbetween bodies in question')
     else:
         if theta < (theta2 - theta1):
             eclipseType = 3
-            print('Eclipse Type: umbra')
         elif abs(theta2 - theta1) < theta < (theta1 + theta2):
             eclipseType = 2
-            print('Eclipse Type: penumbral eclipse')
         elif theta < (theta1 - theta2):
-            print('Eclipse Type: penumbral, annular')
             eclipseType = 1
         else:
-            print('Eclypse Type: Sunlit')
             eclipseType = 0  
+    
+    if verbose is True: 
+        print('---------------------------------------------')
+        if eclipseType == -1: print('Object inbetween bodies in question')
+        elif eclipseType == 0: print('Eclypse Type: Sunlit')
+        elif eclipseType == 1: print('Eclipse Type: penumbral, annular')
+        elif eclipseType == 2: print('Eclipse Type: penumbral, eclipse')
+        elif eclipseType == 3: print('Eclipse Type: umbral')
             
+        print(f"P1: {P1}")
+        print(f"P2: {P2}")
+        print(f"P3: {P3}")
+        
+        print(f"R31: {R31}")
+        print(f"R21: {R21}")
+        print(f"R32: {R32}")
+        
+        print('---------------------------------------------')
     return eclipseType, theta, theta1, theta2
 
 def OcclusionPercentage(theta,theta1,theta2):

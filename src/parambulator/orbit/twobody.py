@@ -8,12 +8,12 @@ Created on Tue Jul  9 12:52:53 2024
 #%% Initialize
 import numpy as np
 import pandas as pd
-import library.planets as planet_data
+import utilities.defaults as default
 
 #%% Constants
 deg2rad     = np.pi/180  # [rad/deg]
 rad2deg     = 180/np.pi  # [deg/rad]
-mu_default  = planet_data.planets['earth']['mu']
+mu_default  = default.mu
 
 #%% General
 def LagrangeFG(R0,V0,delta_nu,mu=mu_default):
@@ -423,6 +423,52 @@ def twb00111_CartToKepler(R,V,mu=mu_default):
 
     return kep_elements
 
+def twb00112_eccentric_anomoly(M:float=None,
+                               e:float=None,
+                               tol:float=0.00001,
+                               max_iter:int=100,
+                               verbose:bool=False,
+                               **args):
+       
+    M_rad       = M*(np.pi/180)
+    max_iter    = max_iter
+    tol         = tol
+    mag         = 100
+    i           = 0
+    E_vec       = [M_rad]
+   
+    while mag > tol and i <= max_iter:
+        E_i         = E_vec[i] 
+        E_new       = E_i - (E_i - M_rad - e*np.sin(E_i))/(1-e*np.cos(E_i))     
+        mag         = abs(E_new - E_i)
+        E_current   = E_new
+        E_vec.append(E_new)
+        i           += 1
+   
+    E_rad   = E_current
+    E_deg   = E_current*(180/np.pi)
+   
+    if verbose is True or i == max_iter:
+        print('-----------')
+        print(f"E_{0}: {M_rad}")
+        print(f"E_{i}: {E_current}")
+        print(f"Iterations: {i}")
+        print(f"Mag: {mag}")
+        print(f"Eccentric Anomaly: {E_rad} [rad]")
+        print(f"Eccentric Anomaly: {E_deg} [deg]")
+       
+    return E_deg
+   
+def twb00113_true_anomaly(E:float=None,
+                          e:float=None,
+                          **args):
+   
+    E_rad   = E*(np.pi/180)
+    nu_rad  = np.arccos((np.cos(E_rad)-e)/(1-e*np.cos(E_rad)))
+    nu_deg  = nu_rad*(180/np.pi)
+   
+    return nu_deg
+
 #%% Two Body Orbit Vectors
 def twb00201_NodeVector1(R,V):
     '''
@@ -467,3 +513,5 @@ def twb00204_OrbitNormalVector2(RAAN,inc):
     O_hat = A @ B @ n
     
     return O_hat
+
+
