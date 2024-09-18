@@ -7,8 +7,8 @@ setup(
     name="parambulator",
     version="0.0.1",
     description="General purpose orbital mechanics library",
-    package_dir={"": "src/parambulator"},
-    packages=find_packages(where="src/parambulator"),
+    package_dir={"": "src"},
+    packages=find_packages(where="src"),
     long_description=long_description,
     long_description_content_type="text/markdown",
     project_urls={
