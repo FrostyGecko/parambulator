@@ -11,7 +11,7 @@ import time
 from astropy.time import Time
 
 #### Parambulator Libraries
-import utilities.defaults as default
+import parambulator.utilities.defaults as default
 
 #%% timekeeper
 def convert_epoch_to_UNIX(epoch:float):

@@ -6,7 +6,7 @@ Created on Thu Sep 12 14:04:23 2024
 @author: isaacfoster
 """
 import matplotlib.pyplot as plt
-from library import bodies as body
+import library.bodies as body
 from utilities.gmat import *
 from utilities.eclipse import *
 from utilities.timekeeper import*

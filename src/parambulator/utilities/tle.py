@@ -10,9 +10,9 @@ import numpy as np
 
 #### Parambulator Libraries
 from satellite_tle import fetch_tle_from_celestrak
-from library import bodies as body
-from orbit import twobody as twb
-import timekeeper as tk
+import parambulator.library.bodies as body
+import parambulator.orbit.twobody as twb
+import parambulator.utilities.timekeeper as tk
 
 #%% tle
 class tle_object():
