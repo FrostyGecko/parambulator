@@ -15,19 +15,18 @@ setup(
         "Source" : "https://github.com/FrostyGecko/parambulator",
         },
     author="FrostyGecko",
-    author_email="imanfoster@gmail.com",
+    author_email="frostygecko1@gmail.com",
     license="MIT",
     classifiers=[
         "Development STatus :: 2 - Pre-Alpha",
         "License :: OSI Approved :: MIT License",
-        "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.12.4",
         "Operating System :: OS Independent",
         "Topic :: Scientific/Engineering",
     ],
-    install_requires=["numpy >= 2.0.4"],
     extras_require={
         "dev": ["pytest>=7.0", "twine>=4.0.2"],
     },
-    python_requires=">=3.12",
+    python_requires=">=3.10",
 )
 
