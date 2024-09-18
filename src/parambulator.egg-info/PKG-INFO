@@ -1,0 +1,20 @@
+Metadata-Version: 2.1
+Name: parambulator
+Version: 0.0.1
+Summary: General purpose orbital mechanics library
+Author: FrostyGecko
+Author-email: frostygecko1@gmail.com
+License: MIT
+Project-URL: Source, https://github.com/FrostyGecko/parambulator
+Classifier: Development STatus :: 2 - Pre-Alpha
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3.12.4
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Scientific/Engineering
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# parambulator
+ General orbital mechanics repo
+
