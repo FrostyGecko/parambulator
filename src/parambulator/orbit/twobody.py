@@ -8,7 +8,7 @@ Created on Tue Jul  9 12:52:53 2024
 #%% Initialize
 import numpy as np
 import pandas as pd
-import parambulator.utilities.defaults as default
+import parambulator.core.defaults as default
 
 #%% Constants
 deg2rad     = np.pi/180  # [rad/deg]

@@ -4,7 +4,7 @@ save_data_on_exit = True
 save_history = True
 save_non_project_files = False
 project_type = 'empty-project-type'
-recent_files = ['utilities/tle.py', 'core/clock.py', 'core/defaults.py', 'core/constants.py']
+recent_files = ['utilities/tle.py']
 
 [main]
 version = 0.2.0

@@ -8,11 +8,13 @@ Created on Thu Sep 12 13:05:57 2024
 #### Standard Libraries
 import numpy as np
 
-#### Parambulator Libraries
+#### Downloaded Libraries
 from satellite_tle import fetch_tle_from_celestrak
+
+#### Parambulator Libraries
 import parambulator.library.bodies as body
 import parambulator.orbit.twobody as twb
-import parambulator.utilities.timekeeper as tk
+import parambulator.core.clock as clock
 
 #%% tle
 class tle_object():
@@ -89,21 +91,28 @@ class tle_object():
         self.TLE_set        = True
        
     def convert_tle_to_kep(self):
+        
+        #### Test if TLE_set is true or false
         if self.TLE_set is False:
-            print('No TLE set')
+            print('-----tle:convert_tle_to_kep-----')
+            print('ERROR: No TLE set')
             return False
        
+        #### Calculate Orbital Parameters
         n                   = self.mean_motion*(1/86400)*(2*np.pi)
         P                   = (2*np.pi)/n
         SMA                 = ((((P/(2*np.pi))**2)*self.mu)**(1/3))
  
+        #### Set time information
+        self.unix_time      = clock.convert_epoch_to_UNIX(self.epoch)
+        self.date_utc       = clock.convert_unix_to_datetime_UTC(self.unix_time)
+        self.date_local     = clock.convert_unix_to_datetime_local(self.unix_time)
+        self.date_modJulian = clock.convert_unix_to_ModJulian_UTC(self.unix_time)
+        
+        #### Set orbital parameters
         self.period         = P
         self.SMA            = SMA
         self.n              = n
-        self.unix_time      = tk.convert_epoch_to_UNIX(self.epoch)
-        self.date_utc       = tk.convert_unix_to_datetime_UTC(self.unix_time)
-        self.date_local     = tk.convert_unix_to_datetime_local(self.unix_time)
-        self.date_modJulian = tk.convert_unix_to_ModJulian_UTC(self.unix_time)
         self.r_a            = self.SMA*(1+self.ECC)
         self.r_p            = self.SMA*(1-self.ECC)
         self.alt_a          = self.r_a - self.RE
@@ -158,5 +167,5 @@ if __name__ == "__main__":
    
     iss.convert_tle_to_kep()
     iss.print_keplerian()
-    print(tk.convert_datetime_to_UTCModJulian(iss.date_utc))
+    print(clock.convert_datetime_to_UTCModJulian(iss.date_utc))
 
