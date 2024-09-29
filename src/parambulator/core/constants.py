@@ -170,6 +170,7 @@ class constant():
 
         '''
         return float(self.value)
+
     
     def get_available_conversions(self,from_unit:str = None):
 
@@ -356,6 +357,7 @@ template   = constant(
                     u_ref           = '',
                     u_ref_link      = ''
                    )
+
 
 #%% Fundamental Physical Constants
 sigma   = constant(abbrev           = 'sigma',
@@ -700,5 +702,3 @@ M_Pbc   = constant('M_Pbc',
                    'kg',
                    'IAU and Brozović, Marina; Jacobson, Robert A. (May 8, 2024)',
                    )
-
-
