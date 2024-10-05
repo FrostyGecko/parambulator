@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import parambulator.library.bodies as body
+import library.bodies as body
 
 radius              = body.planets['earth']['radius']
 mu                  = body.planets['earth']['mu']

@@ -12,7 +12,14 @@ import time
 import copy
 from astropy.time import Time, TimeDelta
 
+<<<<<<< Updated upstream
 import defaults as default
+=======
+#### Parambulator Libraries
+import core.defaults as default
+
+#%% timekeeper
+>>>>>>> Stashed changes
 def convert_epoch_to_UNIX(epoch:float):
           
     # get year 2 digit and floating seconds days
