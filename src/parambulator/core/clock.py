@@ -12,38 +12,122 @@ import time
 import copy
 from astropy.time import Time, TimeDelta
 
-<<<<<<< Updated upstream
-import defaults as default
-=======
-#### Parambulator Libraries
-import core.defaults as default
-
-#%% timekeeper
->>>>>>> Stashed changes
-def convert_epoch_to_UNIX(epoch:float):
-          
-    # get year 2 digit and floating seconds days
-    y_d, nbs = str(epoch).split('.')
-    
-    # parse to datetime (since midnight and add the seconds) %j Day of the year as a zero-padded decimal number.
-    d = dt.datetime.strptime(y_d, "%y%j") + dt.timedelta(seconds=float("." + nbs) * 24 * 60 * 60)
-    # 1.0 => 1 day
-    # from time tuple get epoch time.
-    unix_timestamp = time.mktime(d.timetuple())
-   
-    return unix_timestamp
-   
-def convert_unix_to_datetime_UTC(unix_time):
-    return time.strftime(default.GMAT_date_format, time.gmtime(unix_time))
-   
-# def convert_datetime_to_UTCModJulian(date):
-#     date = datetime.strptime(date, default.GMAT_date_format).strftime('%Y-%m-%dT%H:%M:%S')
-#     t = Time(date, format='isot')
-#     return t.mjd
 
 #%% Clock
 class clock():
     def __init__(self,
+                 year:int           = None,
+                 month:int          = None,
+                 day:int            = None,
+                 hour:int           = None,
+                 minute:int         = None,
+                 second:int         = None,
+                 microsecond:int    = None,
+                 tz                 ='UTC',
+                 local_tz           ='UTC',
+                 **kargs):
+        
+        self.SCALES             = copy.deepcopy(Time.SCALES)
+        self.FORMATS            = copy.deepcopy(Time.FORMATS)
+        self.localDSTstatus     = self.get_local_DST_status()
+        self.tz                 = tz
+        self.local_tz           = local_tz
+        
+        self.set_datetime(
+                     year=year,
+                     month=month,
+                     day=day,
+                     hour=hour,
+                     minute=minute,
+                     second=second,
+                     microsecond=microsecond,
+                     tz=tz)
+            
+        self.timestamp          = 0
+        
+        # Site for testing: https://currentmillis.com/?1729242633280&seconds
+        # site for tai conversion: https://astroconverter.com/clocks.html
+        
+        
+    #%% Dunder Methods
+    def __repr__(self):
+        return str(self.Time.datetime)
+    
+    def __iadd__(self,value):
+        self.Time       = self.Time + TimeDelta(value,format='sec')
+        return self
+    
+    def __add__(self,value):
+        return self.Time + TimeDelta(value,format='sec')
+    
+    def __sub__(self,value):
+        return self.Time - TimeDelta(value,format='sec')
+
+    #%% Property Functions
+    #### Datetime Representations
+    @property
+    def datetime_local(self):
+        return self.Time.utc.datetime.replace(tzinfo=zoneinfo.ZoneInfo('UTC')).astimezone(zoneinfo.ZoneInfo(self.local_tz))
+    
+    @property
+    def datetime_utc(self):
+        return self.Time.utc.datetime.replace(tzinfo=zoneinfo.ZoneInfo('UTC'))
+    
+    @property
+    def datetime_tai(self):
+        return self.Time.datetime
+    
+    #### Astronomical Representations
+    @property
+    def UTCModJulianGMAT(self):
+        jd = self.Time.utc.jd
+        mjd = jd - 2430000.0
+        return float(mjd)
+    
+    @property
+    def UTCModJulian(self):
+        return float(self.Time.utc.mjd)
+    
+    @property
+    def UTCJulian(self):
+        return float(self.Time.utc.jd)
+    
+    @property
+    def UTCunix(self):
+        return float(self.Time.utc.unix)
+    
+    #### Other Representations
+    @property
+    def now(self):
+        return dt.datetime.now()
+    
+    
+    #%% Get Time Functions
+    def get_datetime_tai(self,timezone:str=None):
+        if timezone is None:
+            timezone = self.tz
+        return self.Time.datetime.replace(tzinfo=zoneinfo.ZoneInfo('UTC')).astimezone(zoneinfo.ZoneInfo(timezone))
+    
+    def get_datetime_utc(self,timezone:str=None):
+        if timezone is None:
+            timezone = self.tz
+        return self.Time.utc.datetime.replace(tzinfo=zoneinfo.ZoneInfo('UTC')).astimezone(zoneinfo.ZoneInfo(timezone))
+    
+    #%% Primary Functions
+    def add(self,add,add_format='sec'):
+        return self.Time + TimeDelta(add,format=add_format)
+    
+    def sub(self,sub,sub_format='sec'):
+        return self.Time - TimeDelta(sub,format=sub_format)
+    
+    def increment(self,value,increment_format='sec'):
+        self.Time = self.Time + TimeDelta(value,format=increment_format)
+ 
+    #%% Set Functions
+    def set_local_tz(self,local_tz:str):
+        self.local_tz = local_tz
+    
+    def set_datetime(self,
                  year:int           = None,
                  month:int          = None,
                  day:int            = None,
@@ -63,11 +147,7 @@ class clock():
         if second       is None: second         = 0
         if microsecond  is None: microsecond    = 0
         
-        #### Set Attributes
-        self.SCALES             = copy.deepcopy(Time.SCALES)
-        self.FORMATS            = copy.deepcopy(Time.FORMATS)
         self.tz                 = tz
-        self.localDSTstatus     = self.get_local_DST_status()
         
         #### Set Time
         self.input_datetime     = dt.datetime(year,
@@ -81,62 +161,28 @@ class clock():
         
         self.input_utc_datetime = self.input_datetime.astimezone(zoneinfo.ZoneInfo('utc'))
         self.Time               = Time(self.input_utc_datetime,format='datetime',scale='utc').tai
-        self.timestamp          = 0
-            
-    #%% Dunder Methods
-    def __repr__(self):
-        return str(self.Time.datetime.replace(tzinfo=zoneinfo.ZoneInfo('UTC')))
+        
+    def set_epoch(self,epoch:float):
+        date = self.convert_epoch_to_datetime(epoch)
+        self.set_datetime(
+                     year=date.year,
+                     month=date.month,
+                     day=date.day,
+                     hour=date.hour,
+                     minute=date.minute,
+                     second=date.second,
+                     microsecond=date.microsecond,
+                     tz=self.tz)
     
-    def __iadd__(self,value):
-        self.Time       = self.Time + TimeDelta(value,format='sec')
-        return self
+    #%% Convert Functions
+    def convert_epoch_to_datetime(self,epoch:float):
+        # get year 2 digit and floating seconds days
+        y_d, nbs = str(epoch).split('.')
+        
+        # parse to datetime (since midnight and add the seconds) %j Day of the year as a zero-padded decimal number.
+        d = dt.datetime.strptime(y_d, "%y%j") + dt.timedelta(seconds=float("." + nbs) * 24 * 60 * 60)
+        return d
     
-    def __add__(self,value):
-        return self.Time + TimeDelta(value,format='sec')
-    
-    def __sub__(self,value):
-        return self.Time - TimeDelta(value,format='sec')
-
-    #%% Property Functions
-    #### Datetime Representations
-    @property
-    def LocalDatetime(self):
-        newdatetime = self.Time.datetime.replace(tzinfo=zoneinfo.ZoneInfo('UTC'))
-        return newdatetime.astimezone(zoneinfo.ZoneInfo(self.local_tz))
-    @property
-    def UTCdatetime(self):
-        return self.Time.utc.datetime
-    
-    #### Astronomical Representations
-    @property
-    def UTCModJulianGMAT(self):
-        jd = self.Time.jd
-        mjd = jd - 2430000.0
-        return float(mjd)
-    
-    @property
-    def UTCModJulian(self):
-        return float(self.Time.mjd)
-    
-    @property
-    def UTCJulian(self):
-        return float(self.Time.jd)
-    
-    @property
-    def UTCunix(self):
-        return float(self.Time.unix)
-    
-    #%% Primary Functions
-    def add(self,add,add_format='sec'):
-        return self.Time + TimeDelta(add,format=add_format)
-    
-    def sub(self,sub,sub_format='sec'):
-        return self.Time - TimeDelta(sub,format=sub_format)
-    
-    def increment(self,value,increment_format='sec'):
-        self.Time = self.Time + TimeDelta(value,format=increment_format)
-        # str(self.Time.datetime.replace(tzinfo=ZoneInfo('UTC')))
-
     #%% Get Functions
     def get_formats(self):
         return self.FORMATS
@@ -160,30 +206,30 @@ class clock():
             return True
         else:
             return False
-        
-    #%% Supporting Functions
-    def TZDatetime(self,timezone:str):
-        return self.Time.datetime.replace(tzinfo=zoneinfo.ZoneInfo('UTC')).astimezone(zoneinfo.ZoneInfo(timezone))
-        
-    def UTC_offset(self,dt):
+
+    def get_UTC_offset(self,dt):
         seconds = dt.utcoffset().seconds
         days    = dt.utcoffset().days
         
         return days*24*3600 + seconds
         
-    def local_utc_offset(self):
+    def get_local_utc_offset(self):
         offset_sec  = time.timezone if (time.localtime().tm_isdst == 0) else time.altzone
         offset_min  = offset_sec/60
         offset_hour = offset_min/60
         
         return offset_hour
-        
-
-
-t1 = clock(2024,10,1,0,0,0,scale='utc',tz='America/Denver')
-
-
-print(t1.Time)
-print(t1.UTCdatetime)
-print(t1.UTCunix)
-
+    
+if __name__ == "__main__":
+    epoch = 24292.38232888
+    t1 = clock()
+    t1.set_local_tz('America/Denver')
+    t1.set_epoch(epoch)
+    
+    print(f"Tai:   {t1.Time}")
+    print(f"UTC:   {t1.datetime_utc}")
+    print(f"Local: {t1.datetime_local}")
+    print(f"Unix:  {t1.UTCunix}")
+    print(f"JD:    {t1.UTCJulian}")
+    print(f"MJD:   {t1.UTCModJulian}")
+    print(f"GMJD:  {t1.UTCModJulianGMAT}")
