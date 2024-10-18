@@ -12,7 +12,6 @@ import time
 import copy
 from astropy.time import Time, TimeDelta
 
-
 #%% Clock
 class clock():
     def __init__(self,
@@ -76,6 +75,10 @@ class clock():
     @property
     def datetime_tai(self):
         return self.Time.datetime
+    
+    @property
+    def datetime_tai_gmat(self):
+        return self.Time.utc.datetime.strftime("%d %b %Y %H:%M:%S%f")
     
     #### Astronomical Representations
     @property
