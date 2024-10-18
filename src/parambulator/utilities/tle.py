@@ -108,6 +108,8 @@ class tle_object():
        
         self.TLE_set        = True
         
+        print(self.tle)
+        
     def set_tle(self,
                 epoch,
                 INC,
@@ -188,15 +190,15 @@ class tle_object():
 if __name__ == "__main__":
     norad_id = 25544
     iss = tle_object()
-    iss.set_tle(
-                epoch       = 24256.52757035,
-                INC         = 51.6367,
-                RAAN        = 242.7229,
-                ECC         = 0.0007556,
-                AOP         = 344.7811,
-                M           = 113.2888,
-                mean_motion = 15.48994222472098
-                )
+    # iss.set_tle(
+    #             epoch       = 24256.52757035,
+    #             INC         = 51.6367,
+    #             RAAN        = 242.7229,
+    #             ECC         = 0.0007556,
+    #             AOP         = 344.7811,
+    #             M           = 113.2888,
+    #             mean_motion = 15.48994222472098
+    #             )
    
     iss.set_tle_from_celestrak(norad_id)
     iss.convert_tle_to_kep()

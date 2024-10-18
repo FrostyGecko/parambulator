@@ -41,8 +41,6 @@ class clock():
                      second=second,
                      microsecond=microsecond,
                      tz=tz)
-            
-        self.timestamp          = 0
         
         # Site for testing: https://currentmillis.com/?1729242633280&seconds
         # site for tai conversion: https://astroconverter.com/clocks.html
@@ -61,8 +59,18 @@ class clock():
     
     def __sub__(self,value):
         return self.Time - TimeDelta(value,format='sec')
-
+    
     #%% Property Functions
+    from typing import List
+
+    def properties(cls: type) -> List[str]:
+        return [
+            key
+            for key, value in cls.__dict__.items()
+            if isinstance(value, property)
+        ]
+
+
     #### Datetime Representations
     @property
     def datetime_local(self):
@@ -78,7 +86,11 @@ class clock():
     
     @property
     def datetime_tai_gmat(self):
-        return self.Time.utc.datetime.strftime("%d %b %Y %H:%M:%S%f")
+        return self.Time.datetime.strftime("%d %b %Y %H:%M:%S.%f")
+    
+    @property
+    def datetime_utc_ISO8601(self):
+        return self.Time.utc.datetime.strftime("%Y-%M-%dT%H:%M:%SZ")    
     
     #### Astronomical Representations
     @property
@@ -104,12 +116,10 @@ class clock():
     def now(self):
         return dt.datetime.now()
     
-    
     #%% Get Time Functions
-    def get_datetime_tai(self,timezone:str=None):
-        if timezone is None:
-            timezone = self.tz
-        return self.Time.datetime.replace(tzinfo=zoneinfo.ZoneInfo('UTC')).astimezone(zoneinfo.ZoneInfo(timezone))
+    def get_datetime_tai(self):
+        # self.Time.datetime.replace(tzinfo=zoneinfo.ZoneInfo('UTC')).astimezone(zoneinfo.ZoneInfo(timezone))
+        return self.Time.datetime
     
     def get_datetime_utc(self,timezone:str=None):
         if timezone is None:
@@ -176,6 +186,25 @@ class clock():
                      second=date.second,
                      microsecond=date.microsecond,
                      tz=self.tz)
+        
+        
+    def set_datetime_now(self,timezone:str=None):
+        if timezone is None:
+            timezone = self.tz
+        else:
+            self.local_tz = timezone
+            
+        date = dt.datetime.now()
+        
+        self.set_datetime(
+                     year=date.year,
+                     month=date.month,
+                     day=date.day,
+                     hour=date.hour,
+                     minute=date.minute,
+                     second=date.second,
+                     microsecond=date.microsecond,
+                     tz=timezone)
     
     #%% Convert Functions
     def convert_epoch_to_datetime(self,epoch:float):
@@ -224,15 +253,31 @@ class clock():
         return offset_hour
     
 if __name__ == "__main__":
-    epoch = 24292.38232888
+    
+    epoch = 24292.58040303
     t1 = clock()
     t1.set_local_tz('America/Denver')
     t1.set_epoch(epoch)
-    
-    print(f"Tai:   {t1.Time}")
+    print('--------------------------------------')
+    print(f"TAI:   {t1.Time}")
     print(f"UTC:   {t1.datetime_utc}")
     print(f"Local: {t1.datetime_local}")
     print(f"Unix:  {t1.UTCunix}")
     print(f"JD:    {t1.UTCJulian}")
     print(f"MJD:   {t1.UTCModJulian}")
     print(f"GMJD:  {t1.UTCModJulianGMAT}")
+
+    #### Test local to utc
+    
+    t2 = clock()
+    t2.set_datetime_now('America/Denver')
+    print('--------------------------------------')
+    print(f"TAI:   {t2.Time}")
+    print(f"UTC:   {t2.datetime_utc}")
+    print(f"Local: {t2.datetime_local}")
+    print(f"Unix:  {t2.UTCunix}")
+    print(f"JD:    {t2.UTCJulian}")
+    print(f"MJD:   {t2.UTCModJulian}")
+    print(f"GMJD:  {t2.UTCModJulianGMAT}")
+    
+    
