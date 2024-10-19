@@ -1,5 +1,91 @@
 import numpy as np
 
+class units():
+    def __init__(self):
+        #### Units
+        self.SI_length  = {
+                            'mm'    : 0.001, 
+                            'cm'    : 0.01, 
+                            'm'     : 1.0, 
+                            'km'    : 1000.0, 
+                            'AU'    : 149597870700.0,
+                            'ly'    : 9460730472580800.0,
+                            }
+            
+        self.SI_angle   = {
+                            'arcseconds': 1/3600, 
+                            'arcminutes': 1/60, 
+                            'deg'       : 1,
+                            'rad'       : 180/np.pi
+                            }
+        
+        self.SI_time    = {
+                            's'     : 1,  
+                            'min'   : 60, 
+                            'hour'  : 24,
+                            'day'   : 86400
+                            }
+        
+        self.SI_mass    = {
+                            'mg'        : 1e-6, 
+                            'g'         : 0.001, 
+                            'kg'        : 1,
+                            'solar mass': 1.9884158605722266e+30,
+                            }
+        
+        self.SI_temp    = {
+                            'mK'    : 0.001,
+                            'cK'    : 0.01,
+                            'dK'    : 0.1,
+                            'K'     : 1,
+                            'daK'   : 10,
+                            'hK'    : 100,
+                            'kK'    : 1000
+                            }
+        
+        self.SI_derived = {
+                            'rad'   : ['m/m'],
+                            'sr'    : ['m^2/m^2'],
+                            'Hz'    : ['1/s'],
+                            'N'     : ['kg*m/s^2'],
+                            'Pa'    : ['N/m^2','kg/m*s^2'],
+                            'W'     : ['J/s','N*m/s','kg*m^2/s^3'],
+                            'J' : ['kg*m^2/s^3'],
+
+                            'Pa': ['N/m^2','kg/m*s^2'],
+                            }
+        
+        self.SI_other   = {
+                            'Cp': ['J/kg*K','m^2/s^2*K'],
+                            'k' : ['W/m*k','m*kg/s^3*K'],
+                            'R' : ['1/G','K/W','K*s^3/m^2*kg'],
+                            'G' : ['1/R','W/K','m^2*kg/K*s^3'],
+                            'C' : ['J/K','m^2*kg/s^2*K']
+                            }
+                
+        self.SI_units   = {
+                            'length'    : self.units_length,
+                            'angle'     : self.units_angle,
+                            'time'      : self.units_time,
+                            'mass'      : self.units_mass,
+                            'temp'      : self.units_temp,
+                            'derived'   : self.units_derived
+                            }
+        
+        self.SI_base    = {
+                            'time'          : 's',
+                            'length'        : 'm',
+                            'mass'          : 'kg',
+                            'current'       : 'A',
+                            'temperature'   : 'K',
+                            'amount'        : 'mol',
+                            'luminosity'    : 'cd'
+                            }
+    
+    
+
+
+
 class constant():
     def __init__(self,
                  abbrev:str,
@@ -27,93 +113,93 @@ class constant():
         self.u_ref_link     = u_ref_link
         
         #### Units
-        self.units_length   = {'mm':0.001, 
-                                'cm':0.01, 
-                                'm' :1.0, 
-                                'km':1000.0, 
-                                'AU':149597870700.0,
-                                'ly':9460730472580800.0,
-                                'mile':1/0.000621371,
-                                'ft':1/3.28084,
-                                'in':1/39.3701
+        self.units_length   = {
+                                'mm'    : 0.001, 
+                                'cm'    : 0.01, 
+                                'm'     : 1.0, 
+                                'km'    : 1000.0, 
+                                'AU'    : 149597870700.0,
+                                'ly'    : 9460730472580800.0,
+                                'mile'  : 1/0.000621371,
+                                'ft'    : 1/3.28084,
+                                'in'    : 1/39.3701
                                 }
             
-        self.units_angle    = {'arcseconds': 1/3600, 
+        self.units_angle    = {
+                                'arcseconds': 1/3600, 
                                 'arcminutes': 1/60, 
-                                'deg': 1,
-                                'rad': 180/np.pi
+                                'deg'       : 1,
+                                'rad'       : 180/np.pi
                                 }
         
-        self.units_time     = {'s': 1,  
-                                'min': 60, 
-                                'hour': 24,
-                                'day': 86400
+        self.units_time     = {
+                                's'     : 1,  
+                                'min'   : 60, 
+                                'hour'  : 24,
+                                'day'   : 86400
                                 }
         
-        self.units_mass     = {'mg': 1e-6, 
-                                'g': 0.001, 
-                                'kg': 1,
-                                'solar mass':1.9884158605722266e+30,
-                                'lb':1/2.20462,
-                                'oz':1/35.274
+        self.units_mass     = {
+                                'mg'        : 1e-6, 
+                                'g'         : 0.001, 
+                                'kg'        : 1,
+                                'solar mass': 1.9884158605722266e+30,
+                                'lb'        : 1/2.20462,
+                                'oz'        : 1/35.274
                                 }
         
-        self.units_temp    = {'mC':0.001,
-                                'cC':0.01,
-                                'dC':0.1,
-                                'C':1,
-                                'daC':10,
-                                'hC':100,
-                                'kC':1000,
-                                'mK':0.001,
-                                'cK':0.01,
-                                'dK':0.1,
-                                'K':1,
-                                'daK':10,
-                                'hK':100,
-                                'kK':1000
+        self.units_temp     = {
+                                'mK'    : 0.001,
+                                'cK'    : 0.01,
+                                'dK'    : 0.1,
+                                'K'     : 1,
+                                'daK'   : 10,
+                                'hK'    : 100,
+                                'kK'    : 1000
                                 }
         
-        self.units_derived = {'W': ['J/s','N*m/s','kg*m^2/s^3'],
-                              'J': ['kg*m^2/s^3'],
-                              'N': ['kg*m/s^2'],
-                              'Pa':['N/m^2','kg/m*s^2'],
-                              'Hz':['1/s'],
-                              }
+        self.units_derived = {
+                                'W' : ['J/s','N*m/s','kg*m^2/s^3'],
+                                'J' : ['kg*m^2/s^3'],
+                                'N' : ['kg*m/s^2'],
+                                'Pa': ['N/m^2','kg/m*s^2'],
+                                'Hz': ['1/s'],
+                                }
         
         self.other = {
-                        'Cp':['J/kg*K','m^2/s^2*K'],
-                        'k': ['W/m*k','m*kg/s^3*K'],
-                        'R': ['1/G','K/W','K*s^3/m^2*kg'],
-                        'G': ['1/R','W/K','m^2*kg/K*s^3'],
-                        'C': ['J/K','m^2*kg/s^2*K']
+                        'Cp': ['J/kg*K','m^2/s^2*K'],
+                        'k' : ['W/m*k','m*kg/s^3*K'],
+                        'R' : ['1/G','K/W','K*s^3/m^2*kg'],
+                        'G' : ['1/R','W/K','m^2*kg/K*s^3'],
+                        'C' : ['J/K','m^2*kg/s^2*K']
                         }
                 
         self.units  = {
-                        'length':   self.units_length,
-                        'angle':    self.units_angle,
-                        'time':     self.units_time,
-                        'mass':     self.units_mass,
-                        'temp':     self.units_temp,
-                        'derived':  self.units_derived
+                        'length'    : self.units_length,
+                        'angle'     : self.units_angle,
+                        'time'      : self.units_time,
+                        'mass'      : self.units_mass,
+                        'temp'      : self.units_temp,
+                        'derived'   : self.units_derived
                         }
         
         self.metric_conversions = {
-                                    'm':0.001,
-                                    'c':0.01,
-                                    'd':0.1,
-                                    '1':1,
-                                    'da':10,
-                                    'h':100,
-                                    'k':1000,
+                                    'm' : 0.001,
+                                    'c' : 0.01,
+                                    'd' : 0.1,
+                                    '1' : 1,
+                                    'da': 10,
+                                    'h' : 100,
+                                    'k' : 1000,
                                 }
         
-        self.SI_units        = {'mass':self.units_mass,
-                               'time':self.units_time,
-                               'length':self.units_length,
-                               'angle':self.units_angle,
-                               'temperature':self.units_temp,
-                               'derived':self.units_derived,
+        self.SI_units        = {
+                                'mass'          :self.units_mass,
+                                'time'          :self.units_time,
+                                'length'        :self.units_length,
+                                'angle'         :self.units_angle,
+                                'temperature'   :self.units_temp,
+                                'derived'       :self.units_derived,
                                }
         
         self.unit_supported = False
@@ -216,7 +302,6 @@ class constant():
         return float(self.value)
     
     def get_available_conversions(self,from_unit:str = None):
-
         if from_unit is None:
             from_unit = self.unit
         
