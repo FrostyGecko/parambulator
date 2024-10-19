@@ -12,7 +12,7 @@ class constant():
                  value_ref_link:str = '',
                  u_ref:str          = '',
                  u_ref_link:str     = '',
-                 **args):
+                 **kargs):
     
         #### User Defined Attributes
         self.abbrev         = abbrev
@@ -31,7 +31,7 @@ class constant():
                                 'cm':0.01, 
                                 'm' :1.0, 
                                 'km':1000.0, 
-                                'AU':149597870700.0 ,
+                                'AU':149597870700.0,
                                 'ly':9460730472580800.0,
                                 'mile':1/0.000621371,
                                 'ft':1/3.28084,
@@ -388,15 +388,27 @@ class constant():
             return value
 
 #%% Template
-template   = constant(
-                    abbrev          = 'template',
-                    name            = '',
-                    value           = 5.670374419*(10**(-8)),
-                    uncertainty     = 0,
-                    unit            = '',
-                    value_ref       = '',
-                    value_ref_link  = '',
-                    u_ref           = '',
-                    u_ref_link      = ''
-                   )
-
+if __name__ == "__main__":
+    sigma   = constant(
+                        abbrev          = 'sigma',
+                        name            = 'Stefan-Boltzmann constant',
+                        value           = 5.670374419*(10**(-8)),
+                        uncertainty     = 0,
+                        unit            = 'W/(m^2*K^4)',
+                        value_ref       = 'NIST',
+                        value_ref_link  = 'https://physics.nist.gov/cgi-bin/cuu/Value?sigma',
+                        u_ref           = 'NIST',
+                        u_ref_link      = 'https://physics.nist.gov/cgi-bin/cuu/Value?sigma'
+                       )
+    
+    AU   = constant(
+                        abbrev          = 'AU',
+                        name            = 'astronomical unit',
+                        value           = 1.49597870700*(10**11),
+                        uncertainty     = 3,
+                        unit            = 'm',
+                        value_ref       = 'IAU',
+                        value_ref_link  = 'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf',
+                        u_ref           = 'IAU',
+                        u_ref_link      = 'https://apps.dtic.mil/sti/tr/pdf/ADA551834.pdf'
+                       )

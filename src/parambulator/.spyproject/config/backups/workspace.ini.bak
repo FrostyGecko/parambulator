@@ -4,7 +4,7 @@ save_data_on_exit = True
 save_history = True
 save_non_project_files = False
 project_type = 'empty-project-type'
-recent_files = ['../../../../../../.spyder-py3/temp.py', 'core/clock.py', 'utilities/tle.py']
+recent_files = ['utilities/tle.py', 'core/constant.py', 'library/constants.py', 'library/materials.py', 'core/clock.py']
 
 [main]
 version = 0.2.0

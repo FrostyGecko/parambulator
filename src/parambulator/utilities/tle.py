@@ -5,7 +5,7 @@ Created on Thu Sep 12 13:05:57 2024
 @author: fosterij
 """
 #%% Initalize
-#### Standard Libraries
+#### Standard Libra ries
 import numpy as np
 
 #### Downloaded Libraries
@@ -15,6 +15,7 @@ from satellite_tle import fetch_tle_from_celestrak
 import library.bodies as body
 import orbit.twobody as twb
 import core.clock as clock
+from core.constant import constant
 
 #%% tle
 class tle_object():
