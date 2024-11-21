@@ -12,17 +12,14 @@ import numpy as np
 from satellite_tle import fetch_tle_from_celestrak
 
 #### Parambulator Libraries
-import library.bodies as body
-import orbit.twobody as twb
-import core.clock as clock
-from core.constant import constant
+import clock as clock
 
 #%% tle
 class tle_object():
     def __init__(self,
                  norad_id   = None,
-                 Earth_R    = body.planets['earth']['radius'],
-                 Earth_mu   = body.planets['earth']['mu'],
+                 Earth_R    = 6378.165,
+                 Earth_mu   = 398600.432896939,
                  **kwargs
                  ):
         
@@ -43,12 +40,12 @@ class tle_object():
        
         #### Set time information
         self.tle_clock      = clock.clock()
-        self.tle_clock.set_local_tz('America/Denver')
-        self.tle_clock.set_epoch(self.epoch)
+        self.tle_clock.SetTimezone('America/Denver')
+        self.tle_clock.SetEpoch(self.epoch)
         self.date_tai       = self.tle_clock.Time
         self.unix_time      = self.tle_clock.UTCunix
-        self.date_utc       = self.tle_clock.datetime_utc
-        self.date_local     = self.tle_clock.datetime_local
+        self.date_utc       = self.tle_clock.DatetimeUTC
+        self.date_local     = self.tle_clock.DatetimeLocal
         self.date_modJulian = self.tle_clock.UTCModJulian
         
         #### Set orbital parameters
@@ -59,8 +56,8 @@ class tle_object():
         self.RadPer         = self.SMA*(1-self.ECC)
         self.alt_a          = self.RadApo - self.RE
         self.alt_p          = self.RadPer - self.RE
-        self.E              = twb.twb00112_eccentric_anomoly(self.M,self.ECC)
-        self.TA             = twb.twb00113_true_anomaly(self.E,self.ECC)
+        self.E              = self.twb00112_eccentric_anomoly(self.M,self.ECC)
+        self.TA             = self.twb00113_true_anomaly(self.E,self.ECC)
         
         self.Kep_set        = True
     
@@ -129,6 +126,52 @@ class tle_object():
         self.mean_motion    = mean_motion
         self.TLE_set        = True
         
+    #%% Orbit Functions
+    def twb00112_eccentric_anomoly(self,M:float=None,
+                                   e:float=None,
+                                   tol:float=0.00001,
+                                   max_iter:int=100,
+                                   verbose:bool=False,
+                                   **args):
+           
+        M_rad       = M*(np.pi/180)
+        max_iter    = max_iter
+        tol         = tol
+        mag         = 100
+        i           = 0
+        E_vec       = [M_rad]
+       
+        while mag > tol and i <= max_iter:
+            E_i         = E_vec[i] 
+            E_new       = E_i - (E_i - M_rad - e*np.sin(E_i))/(1-e*np.cos(E_i))     
+            mag         = abs(E_new - E_i)
+            E_current   = E_new
+            E_vec.append(E_new)
+            i           += 1
+       
+        E_rad   = E_current
+        E_deg   = E_current*(180/np.pi)
+       
+        if verbose is True or i == max_iter:
+            print('-----------')
+            print(f"E_{0}: {M_rad}")
+            print(f"E_{i}: {E_current}")
+            print(f"Iterations: {i}")
+            print(f"Mag: {mag}")
+            print(f"Eccentric Anomaly: {E_rad} [rad]")
+            print(f"Eccentric Anomaly: {E_deg} [deg]")
+           
+        return E_deg
+       
+    def twb00113_true_anomaly(self,E:float=None,
+                              e:float=None,
+                              **args):
+       
+        E_rad   = E*(np.pi/180)
+        nu_rad  = np.arccos((np.cos(E_rad)-e)/(1-e*np.cos(E_rad)))
+        nu_deg  = nu_rad*(180/np.pi)
+       
+        return nu_deg
     #%% Get Functions
     def get_keplerian(self):
         self.convert_tle_to_kep()
@@ -143,6 +186,7 @@ class tle_object():
                'RadApo':self.RadApo
             }        
         return kep        
+    
     
     #%% Print Functions
     def print_time_summary(self):
